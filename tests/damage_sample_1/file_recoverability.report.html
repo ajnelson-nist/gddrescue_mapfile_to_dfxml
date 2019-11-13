@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style type="text/css">
+      table {
+        border-collapse: collapse;
+      }
+      td {
+        border: 1px solid black;
+      }
+      th {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Report of file recoverability</h1>
+    <p>Of 1,000,204,886,016 bytes (1 TB) of the original disk, 1,073,742,336 bytes (1.07 GB) are not in the acquired disk image.</p>
+    <p>11 files were affected.</p>
+    <table>
+      <caption>Table 1. File systems</caption>
+      <thead>
+        <tr>
+          <th>FS #</th>
+          <th>Offset</th>
+          <th>Length</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>10485760</td>
+          <td>1000194400256</td>
+          <td>examplefs</td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <caption>Table 2. Affected files</caption>
+      <thead>
+        <tr>
+          <th>FS #</th>
+          <th>Type</th>
+          <th>Size (bytes)</th>
+          <th>Missing bytes</th>
+          <th>Path</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><code>v</code></td>
+          <td>512</td>
+          <td>512</td>
+          <td><code>first_sector.bin</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>v</code></td>
+          <td>4000</td>
+          <td>512</td>
+          <td><code>first_four_kilobytes.bin</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>r</code></td>
+          <td>8192</td>
+          <td>4096</td>
+          <td><code>contiguous_around_bad_region_left_edge.dat</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>r</code></td>
+          <td>4096</td>
+          <td>4096</td>
+          <td><code>contiguous_in_bad_region.dat</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>r</code></td>
+          <td>8192</td>
+          <td>4096</td>
+          <td><code>contiguous_around_bad_region_right_edge.dat</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>r</code></td>
+          <td>12288</td>
+          <td>12288</td>
+          <td><code>fragmented_all_inside_bad_region.dat</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>r</code></td>
+          <td>8192</td>
+          <td>4096</td>
+          <td><code>fragmented_beginning_inside_bad_region.dat</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>r</code></td>
+          <td>12288</td>
+          <td>4096</td>
+          <td><code>fragmented_middle_inside_bad_region.dat</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>r</code></td>
+          <td>8192</td>
+          <td>4096</td>
+          <td><code>fragmented_end_inside_bad_region.dat</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>r</code></td>
+          <td>4096</td>
+          <td>4096</td>
+          <td><code>after_disk_image_end.dat</code></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>d</code></td>
+          <td>12288</td>
+          <td>4096</td>
+          <td><code>fragmented_partially_recoverable_directory</code></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Note that "FS #" is a simple incrementing integer defined only in this report.  A missing "FS #" indicates the input DFXML did not have the file associated with a file system.</p>
+    <p>The file type code is the DFXML encoding of <code>name_type</code>.  <code>r</code> is a regular file; <code>d</code> a directory; and <code>v</code> a "virtual" file, a file that is not precisely a file in the file system, but is treated as a file by the tool that parsed the file system.</p>
+    <p>The "Size" column is the size of the file according to the file system.  "Missing bytes" indicates how many bytes of the file were not captured in the disk image.</p>
+  </body>
+</html>

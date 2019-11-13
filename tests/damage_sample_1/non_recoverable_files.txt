@@ -1,0 +1,11 @@
+first_sector.bin
+first_four_kilobytes.bin
+contiguous_around_bad_region_left_edge.dat
+contiguous_in_bad_region.dat
+contiguous_around_bad_region_right_edge.dat
+fragmented_all_inside_bad_region.dat
+fragmented_beginning_inside_bad_region.dat
+fragmented_middle_inside_bad_region.dat
+fragmented_end_inside_bad_region.dat
+after_disk_image_end.dat
+fragmented_partially_recoverable_directory

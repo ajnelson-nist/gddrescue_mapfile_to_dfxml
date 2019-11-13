@@ -1,0 +1,12 @@
+# Mapfile. Created by GNU ddrescue version 1.22
+# Command line: ddrescue --preallocate /dev/sr0 disk.img disk.img.mapfile
+# Start time:   2019-09-17 16:50:43
+# Current time: 2019-09-17 21:50:43
+# Scraping failed blocks... (forwards)
+# current_pos  current_status  current_pass
+0x08912A00     /               1
+#      pos        size  status
+0x00000000  0x08912A00  -
+0x08912A00  0x12F0F400  /
+0x1B821E00  0x00000200  -
+0x1B822000  0x02531800  +

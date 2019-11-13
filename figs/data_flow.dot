@@ -1,0 +1,41 @@
+/*
+This software was developed at the National Institute of Standards
+and Technology by employees of the Federal Government in the course
+of their official duties. Pursuant to title 17 Section 105 of the
+United States Code this software is not subject to copyright
+protection and is in the public domain. NIST assumes no
+responsibility whatsoever for its use by other parties, and makes
+no guarantees, expressed or implied, about its quality,
+reliability, or any other characteristic.
+
+We would appreciate acknowledgement if the software is used.
+*/
+
+digraph "data_flow" {
+	_disk [label="Disk" shape="box3d"];
+
+	subgraph cluster_ddrescue_output {
+		label="ddrescue output";
+		_disk_image [label="Disk image" shape="note"];
+		_mapfile [label="Mapfile" shape="note"];
+	}
+
+	_disk_image_dfxml [label="Disk image DFXML" shape="note"];
+	_disk_image_report [label="Disk image report" shape="note"];
+	_file_system_dfxml [label="File system DFXML" shape="note"];
+	_recoverability_dfxml [label="Recoverability DFXML" shape="note"];
+	_recoverability_report [label="Recoverability report" shape="note"];
+	
+	_disk -> _disk_image [label="Step 1"];
+	_disk -> _mapfile [label="Step 1"];
+
+	_mapfile -> _disk_image_dfxml [label="Step 2"];
+	_disk_image_dfxml -> _disk_image_report [label="Step 3"];
+
+	_disk_image -> _file_system_dfxml [label="Step 4"];
+
+	_disk_image_dfxml -> _recoverability_dfxml [label="Step 5"];
+	_file_system_dfxml -> _recoverability_dfxml [label="Step 5"];
+
+	_recoverability_dfxml -> _recoverability_report [label="Step 6"];
+}

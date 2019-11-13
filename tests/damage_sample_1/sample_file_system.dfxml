@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<dfxml xmlns="http://www.forensicswiki.org/wiki/Category:Digital_Forensics_XML" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dfxmlext="http://www.forensicswiki.org/wiki/Category:Digital_Forensics_XML#extensions" version="1.2.0">
+  <metadata>
+    <dc:type>Example</dc:type>
+  </metadata>
+  <creator>
+    <program>sample_file_system_dfxml.py</program>
+    <version>0.1.0</version>
+    <execution_environment>
+      <command_line>sample_file_system_dfxml.py</command_line>
+    </execution_environment>
+    <library name="Python" version="3.8.0"/>
+    <library name="Objects.py" version="0.9.0"/>
+    <library name="dfxml.py" version="1.0.2"/>
+  </creator>
+  <volume>
+    <byte_runs>
+      <byte_run len="1000194400256" img_offset="10485760"/>
+    </byte_runs>
+    <ftype_str>examplefs</ftype_str>
+    <fileobject>
+      <filename>first_sector.bin</filename>
+      <name_type>v</name_type>
+      <filesize>512</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="512" img_offset="0"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>first_four_kilobytes.bin</filename>
+      <name_type>v</name_type>
+      <filesize>4000</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4000" img_offset="0"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>contiguous_before_bad_region.dat</filename>
+      <name_type>r</name_type>
+      <filesize>4096</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="10489856"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>contiguous_around_bad_region_left_edge.dat</filename>
+      <name_type>r</name_type>
+      <filesize>8192</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="8192" img_offset="429496725504"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>contiguous_in_bad_region.dat</filename>
+      <name_type>r</name_type>
+      <filesize>4096</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="429496733696"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>contiguous_around_bad_region_right_edge.dat</filename>
+      <name_type>r</name_type>
+      <filesize>8192</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="8192" img_offset="430570467328"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>contiguous_after_bad_region.dat</filename>
+      <name_type>r</name_type>
+      <filesize>4096</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="430570479616"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_all_before_bad_region.dat</filename>
+      <name_type>r</name_type>
+      <filesize>12288</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="10526720"/>
+        <byte_run len="4096" img_offset="10567680"/>
+        <byte_run len="4096" img_offset="10608640"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_all_after_bad_region.dat</filename>
+      <name_type>r</name_type>
+      <filesize>12288</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="430570512384"/>
+        <byte_run len="4096" img_offset="430570553344"/>
+        <byte_run len="4096" img_offset="430570594304"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_all_inside_bad_region.dat</filename>
+      <name_type>r</name_type>
+      <filesize>12288</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="429496770560"/>
+        <byte_run len="4096" img_offset="429496811520"/>
+        <byte_run len="4096" img_offset="429496852480"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_beginning_inside_bad_region.dat</filename>
+      <name_type>r</name_type>
+      <filesize>8192</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="429496893440"/>
+        <byte_run len="4096" img_offset="430570635264"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_middle_inside_bad_region.dat</filename>
+      <name_type>r</name_type>
+      <filesize>12288</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="10690560"/>
+        <byte_run len="4096" img_offset="429496934400"/>
+        <byte_run len="4096" img_offset="430570676224"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_end_inside_bad_region.dat</filename>
+      <name_type>r</name_type>
+      <filesize>8192</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="10731520"/>
+        <byte_run len="4096" img_offset="429496975360"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>after_disk_image_end.dat</filename>
+      <name_type>r</name_type>
+      <filesize>4096</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="1000208982016"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_partially_recoverable_directory</filename>
+      <name_type>d</name_type>
+      <filesize>12288</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="11182080"/>
+        <byte_run len="4096" img_offset="429497425920"/>
+        <byte_run len="4096" img_offset="430571167744"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_partially_recoverable_directory/child_file_1</filename>
+      <name_type>r</name_type>
+      <filesize>4096</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="11223040"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_partially_recoverable_directory/child_file_2</filename>
+      <name_type>r</name_type>
+      <filesize>4096</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="11264000"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_partially_recoverable_directory/child_file_3</filename>
+      <name_type>r</name_type>
+      <filesize>4096</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="11304960"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_partially_recoverable_directory/child_file_4</filename>
+      <name_type>r</name_type>
+      <filesize>4096</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="11345920"/>
+      </byte_runs>
+    </fileobject>
+    <fileobject>
+      <filename>fragmented_partially_recoverable_directory/child_file_9</filename>
+      <name_type>r</name_type>
+      <filesize>4096</filesize>
+      <alloc>1</alloc>
+      <byte_runs>
+        <byte_run len="4096" img_offset="430571208704"/>
+      </byte_runs>
+    </fileobject>
+  </volume>
+</dfxml>
