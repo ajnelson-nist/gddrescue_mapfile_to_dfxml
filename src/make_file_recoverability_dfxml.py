@@ -157,12 +157,12 @@ def main() -> None:
                 file_count_containment_unknown += 1
                 byte_runs_contained = None
                 break
-            elif byte_run_contained == False:
+            elif byte_run_contained is False:
                 byte_runs_contained = False
                 break
-        if byte_runs_contained == True:
+        if byte_runs_contained:
             file_count_intact += 1
-        if byte_runs_contained == False:
+        if byte_runs_contained is False:
             file_count_not_fully_recoverable += 1
             # Record fileobject as child of diskimageobject.
             appender_stack[-1].append(obj)
