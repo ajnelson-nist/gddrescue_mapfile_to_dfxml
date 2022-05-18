@@ -18,10 +18,10 @@ This program takes DFXML representations of a disk image that may have damaged s
 __version__ = "0.1.0"
 
 import argparse
-import sys
 import logging
 import os
 import subprocess
+import sys
 import typing
 
 import dfxml

@@ -16,11 +16,11 @@ The GNU ddrescue mapfile format reports a status character for every block in a 
 """
 
 import argparse
+import enum
+import logging
 import os
 import sys
 import typing
-import logging
-import enum
 
 import dfxml
 from dfxml import objects as Objects
