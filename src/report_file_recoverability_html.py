@@ -28,9 +28,9 @@ Prints HTML5 report to stdout.
 __version__ = "0.1.0"
 
 import argparse
-import os
-import logging
 import locale
+import logging
+import os
 import typing
 
 from dfxml import objects as Objects

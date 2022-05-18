@@ -18,7 +18,6 @@ import os
 import typing
 
 import portion  # type: ignore
-
 from dfxml import objects as Objects
 
 _logger = logging.getLogger(os.path.basename(__file__))
