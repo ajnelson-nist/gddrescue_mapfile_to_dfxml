@@ -74,8 +74,8 @@ class MapfileParser(object):
         dobj.add_creator_library(
             "Python", ".".join(map(str, sys.version_info[0:3]))
         )  # A bit of a bend, but gets the major version information out.
-        dobj.add_creator_library("Objects.py", Objects.__version__)
-        dobj.add_creator_library("dfxml.py", dfxml.__version__)
+        dobj.add_creator_library("dfxml", dfxml.__version__)
+        dobj.add_creator_library("dfxml.objects", Objects.__version__)
         diobj = Objects.DiskImageObject()
         dobj.append(diobj)
         brs = Objects.ByteRuns()
