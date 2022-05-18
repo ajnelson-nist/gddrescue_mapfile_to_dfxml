@@ -34,6 +34,7 @@ import locale
 HAVE_HUMANFRIENDLY = False
 try:
     import humanfriendly
+
     HAVE_HUMANFRIENDLY = True
 except:
     pass
@@ -45,7 +46,8 @@ import intact_byte_run_index
 _logger = logging.getLogger(os.path.basename(__file__))
 
 # Comma separation c/o: https://stackoverflow.com/a/10742904
-locale.setlocale(locale.LC_ALL, '')
+locale.setlocale(locale.LC_ALL, "")
+
 
 def main():
 
@@ -66,17 +68,24 @@ def main():
             for br in obj.byte_runs:
                 bytes_unread -= br.len
             if HAVE_HUMANFRIENDLY:
-                parenthetical_friendly_filesize = " (%s)" % humanfriendly.format_size(obj.filesize)
-                parenthetical_friendly_bytes_unread = " (%s)" % humanfriendly.format_size(bytes_unread)
+                parenthetical_friendly_filesize = " (%s)" % humanfriendly.format_size(
+                    obj.filesize
+                )
+                parenthetical_friendly_bytes_unread = (
+                    " (%s)" % humanfriendly.format_size(bytes_unread)
+                )
             else:
                 parenthetical_friendly_filesize = ""
                 parenthetical_friendly_bytes_unread = ""
 
-            disk_summary_message = "Of %s bytes%s of the original disk, %s bytes%s are not in the acquired disk image." % (
-              f'{obj.filesize:n}',
-              parenthetical_friendly_filesize,
-              f'{bytes_unread:n}',
-              parenthetical_friendly_bytes_unread
+            disk_summary_message = (
+                "Of %s bytes%s of the original disk, %s bytes%s are not in the acquired disk image."
+                % (
+                    f"{obj.filesize:n}",
+                    parenthetical_friendly_filesize,
+                    f"{bytes_unread:n}",
+                    parenthetical_friendly_bytes_unread,
+                )
             )
 
             br_index.ingest_byte_runs(obj.byte_runs)
@@ -91,12 +100,7 @@ def main():
             else:
                 fs_img_offset = obj.byte_runs[0].img_offset
                 fs_len = obj.byte_runs[0].len
-            file_system_tuples.append((
-              fs_tally,
-              fs_img_offset,
-              fs_len,
-              obj.ftype_str
-            ))
+            file_system_tuples.append((fs_tally, fs_img_offset, fs_len, obj.ftype_str))
         elif isinstance(obj, Objects.FileObject):
             fileobject_tally += 1
 
@@ -107,7 +111,8 @@ def main():
     else:
         files_summary_message = "%d files were affected." % fileobject_tally
 
-    print("""\
+    print(
+        """\
 <!doctype html>
 <html>
   <head>
@@ -127,10 +132,13 @@ def main():
   <body>
     <h1>Report of file recoverability</h1>
     <p>%s</p>
-    <p>%s</p>""" % (disk_summary_message, files_summary_message))
+    <p>%s</p>"""
+        % (disk_summary_message, files_summary_message)
+    )
 
     if fileobject_tally > 0:
-        print("""\
+        print(
+            """\
     <table>
       <caption>Table 1. File systems</caption>
       <thead>
@@ -141,16 +149,21 @@ def main():
           <th>Type</th>
         </tr>
       </thead>
-      <tbody>""")
+      <tbody>"""
+        )
         for file_system_tuple in file_system_tuples:
-            print("""\
+            print(
+                """\
         <tr>
           <td>%d</td>
           <td>%d</td>
           <td>%d</td>
           <td>%s</td>
-        </tr>""" % file_system_tuple)
-        print("""\
+        </tr>"""
+                % file_system_tuple
+            )
+        print(
+            """\
       </tbody>
     </table>
     <table>
@@ -164,7 +177,8 @@ def main():
           <th>Path</th>
         </tr>
       </thead>
-      <tbody>""")
+      <tbody>"""
+        )
 
         last_fs_number = 0
         current_fs_number_str = ""
@@ -181,7 +195,7 @@ def main():
 
             # The remainder of this loop analyzes files.
 
-            #TODO
+            # TODO
             bytes_present = 0
             for byte_run in obj.data_brs:
                 for filtered_run_pair in br_index.filter_byte_run(byte_run):
@@ -189,27 +203,42 @@ def main():
             bytes_missing = obj.filesize - bytes_present
 
             name_type = "" if obj.name_type is None else obj.name_type
-            print("""\
+            print(
+                """\
         <tr>
           <td>%s</td>
           <td><code>%s</code></td>
           <td>%d</td>
           <td>%d</td>
           <td><code>%s</code></td>
-        </tr>""" % (current_fs_number_str, name_type, obj.filesize, bytes_missing, obj.filename))
+        </tr>"""
+                % (
+                    current_fs_number_str,
+                    name_type,
+                    obj.filesize,
+                    bytes_missing,
+                    obj.filename,
+                )
+            )
 
-        print("""\
+        print(
+            """\
       </tbody>
     </table>
     <p>Note that "FS #" is a simple incrementing integer defined only in this report.  A missing "FS #" indicates the input DFXML did not have the file associated with a file system.</p>
     <p>The file type code is the DFXML encoding of <code>name_type</code>.  <code>r</code> is a regular file; <code>d</code> a directory; and <code>v</code> a "virtual" file, a file that is not precisely a file in the file system, but is treated as a file by the tool that parsed the file system.</p>
-    <p>The "Size" column is the size of the file according to the file system.  "Missing bytes" indicates how many bytes of the file were not captured in the disk image.</p>""")
-    print("""\
+    <p>The "Size" column is the size of the file according to the file system.  "Missing bytes" indicates how many bytes of the file were not captured in the disk image.</p>"""
+        )
+    print(
+        """\
   </body>
-</html>""")
+</html>"""
+    )
+
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--debug", action="store_true")
     parser.add_argument("disk_image_dfxml")
