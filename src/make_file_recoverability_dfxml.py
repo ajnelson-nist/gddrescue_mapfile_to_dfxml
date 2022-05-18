@@ -17,12 +17,14 @@ This program takes DFXML representations of a disk image that may have damaged s
 
 __version__ = "0.1.0"
 
+import argparse
 import sys
 import logging
 import os
 import subprocess
 import typing
 
+import dfxml
 from dfxml import objects as Objects
 
 import intact_byte_run_index
@@ -47,7 +49,7 @@ def get_portion_version() -> str:
     return version_string
 
 
-def main():
+def main() -> None:
     # Initialize output object.
     # TODO Upgrade to 1.3.0 on schema release.
     dobj = Objects.DFXMLObject(version="1.2.0+")
@@ -59,7 +61,7 @@ def main():
         "Python", ".".join(map(str, sys.version_info[0:3]))
     )  # A bit of a bend, but gets the major version information out.
     dobj.add_creator_library("objects.py", Objects.__version__)
-    dobj.add_creator_library("dfxml.py", Objects.dfxml.__version__)
+    dobj.add_creator_library("dfxml.py", dfxml.__version__)
     dobj.add_creator_library("portion", get_portion_version())
     dobj.add_creator_library(
         "intact_byte_run_index.py", intact_byte_run_index.__version__
@@ -72,7 +74,7 @@ def main():
 
     br_index = intact_byte_run_index.IntactByteRunIndex()
 
-    diobj = None
+    diobj: typing.Optional[Objects.DiskImageObject] = None
     # Index the byte runs of the disk image.
     for (event, obj) in Objects.iterparse(disk_image_dfxml):
         if not isinstance(obj, Objects.DiskImageObject):
@@ -88,6 +90,12 @@ def main():
         diobj = obj
         break
 
+    if diobj is None:
+        raise ValueError(
+            "Input DFXML document did not report a DiskImageObject: %r."
+            % disk_image_dfxml
+        )
+
     # Confirm initialization.
     if br_index.intervals is None:
         raise ValueError(
@@ -99,7 +107,7 @@ def main():
     dobj.append(diobj)
 
     # The loop below will want to attach fileobjects to the closest/lowest parent in the object hierarchy.  Might be the disk image, might be the containing file system.
-    appender_stack = [diobj]
+    appender_stack: typing.List[Objects.AbstractParentObject] = [diobj]
 
     file_count_encountered = 0
     file_count_missing_byte_runs = 0
@@ -124,12 +132,16 @@ def main():
             continue
         file_count_encountered += 1
 
-        if obj.byte_runs is None or len(obj.byte_runs) == 0:
+        if obj.data_brs is None:
+            file_count_missing_byte_runs += 1
+            continue
+
+        if len(obj.data_brs) == 0:
             file_count_missing_byte_runs += 1
             continue
 
         # This variable might be set to None within the loop through the content byte runs.
-        byte_runs_contained = True
+        byte_runs_contained: typing.Optional[bool] = True
         for byte_run in obj.data_brs:
             if byte_run.img_offset is None:
                 # TODO See if this can be computed from fs_offset.
@@ -176,8 +188,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import argparse
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--debug", action="store_true")
     parser.add_argument(

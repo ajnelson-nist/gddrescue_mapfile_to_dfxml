@@ -27,13 +27,15 @@ Prints HTML5 report to stdout.
 
 __version__ = "0.1.0"
 
+import argparse
 import os
 import logging
 import locale
+import typing
 
 HAVE_HUMANFRIENDLY = False
 try:
-    import humanfriendly
+    import humanfriendly  # type: ignore
 
     HAVE_HUMANFRIENDLY = True
 except:
@@ -49,14 +51,24 @@ _logger = logging.getLogger(os.path.basename(__file__))
 locale.setlocale(locale.LC_ALL, "")
 
 
-def main():
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--debug", action="store_true")
+    parser.add_argument("disk_image_dfxml")
+    args = parser.parse_args()
+
+    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
 
     br_index = intact_byte_run_index.IntactByteRunIndex()
 
     original_disk_size = None
     disk_summary_message = None
     files_summary_message = None
-    file_system_tuples = []
+    file_system_tuples: typing.List[
+        typing.Tuple[
+            int, typing.Optional[int], typing.Optional[int], typing.Optional[str]
+        ]
+    ] = []
     fileobject_tally = 0
 
     for (event, obj) in Objects.iterparse(args.disk_image_dfxml):
@@ -65,8 +77,9 @@ def main():
                 continue
             original_disk_size = obj.filesize
             bytes_unread = original_disk_size
-            for br in obj.byte_runs:
-                bytes_unread -= br.len
+            if obj.byte_runs is not None:
+                for br in obj.byte_runs:
+                    bytes_unread -= br.len
             if HAVE_HUMANFRIENDLY:
                 parenthetical_friendly_filesize = " (%s)" % humanfriendly.format_size(
                     obj.filesize
@@ -88,11 +101,13 @@ def main():
                 )
             )
 
-            br_index.ingest_byte_runs(obj.byte_runs)
+            if obj.byte_runs is not None:
+                br_index.ingest_byte_runs(obj.byte_runs)
         elif isinstance(obj, Objects.VolumeObject):
             if event != "end":
                 continue
             fs_tally = len(file_system_tuples) + 1  # (counting newly discovered self)
+            fs_len: typing.Optional[int] = None
             # Determine file system geometry.
             if obj.byte_runs is None or len(obj.byte_runs) == 0:
                 fs_img_offset = obj.partition_offset
@@ -152,15 +167,21 @@ def main():
       <tbody>"""
         )
         for file_system_tuple in file_system_tuples:
+            file_system_tuple_prettyprint = (
+                file_system_tuple[0],
+                "." if file_system_tuple[1] is None else str(file_system_tuple[1]),
+                "." if file_system_tuple[2] is None else str(file_system_tuple[2]),
+                file_system_tuple[3],
+            )
             print(
                 """\
         <tr>
           <td>%d</td>
-          <td>%d</td>
-          <td>%d</td>
+          <td>%s</td>
+          <td>%s</td>
           <td>%s</td>
         </tr>"""
-                % file_system_tuple
+                % file_system_tuple_prettyprint
             )
         print(
             """\
@@ -196,11 +217,17 @@ def main():
             # The remainder of this loop analyzes files.
 
             # TODO
-            bytes_present = 0
-            for byte_run in obj.data_brs:
-                for filtered_run_pair in br_index.filter_byte_run(byte_run):
-                    bytes_present += filtered_run_pair[1]
-            bytes_missing = obj.filesize - bytes_present
+            bytes_missing_str = "."
+            bytes_present: typing.Optional[int] = None
+            if obj.data_brs is not None:
+                bytes_present = 0
+                for byte_run in obj.data_brs:
+                    filtered_run_pairs = br_index.filter_byte_run(byte_run)
+                    if filtered_run_pairs is not None:
+                        for filtered_run_pair in filtered_run_pairs:
+                            bytes_present += filtered_run_pair[1]
+                bytes_missing = obj.filesize - bytes_present
+                bytes_missing_str = str(bytes_missing)
 
             name_type = "" if obj.name_type is None else obj.name_type
             print(
@@ -209,14 +236,14 @@ def main():
           <td>%s</td>
           <td><code>%s</code></td>
           <td>%d</td>
-          <td>%d</td>
+          <td>%s</td>
           <td><code>%s</code></td>
         </tr>"""
                 % (
                     current_fs_number_str,
                     name_type,
                     obj.filesize,
-                    bytes_missing,
+                    bytes_missing_str,
                     obj.filename,
                 )
             )
@@ -237,11 +264,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--debug", action="store_true")
-    parser.add_argument("disk_image_dfxml")
-    args = parser.parse_args()
-    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
     main()

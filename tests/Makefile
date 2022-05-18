@@ -103,6 +103,7 @@ check-mypy: \
 	  && mypy \
 	    --strict \
 	    $(top_srcdir)/gddrescue_mapfile_to_dfxml \
+	    $(top_srcdir)/src \
 	    .
 
 clean:
