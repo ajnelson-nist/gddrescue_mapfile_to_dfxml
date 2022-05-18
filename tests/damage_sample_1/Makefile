@@ -73,7 +73,7 @@ diskimage.dfxml: \
   $(top_srcdir)/gddrescue_mapfile_to_dfxml/cli.py \
   ../.check-dfxml-loads.done.log \
   damage_sample.img.mapfile
-	source $(top_srcdir)/venv/bin/activate \
+	source $(top_srcdir)/tests/venv/bin/activate \
 	  && gddrescue_mapfile_to_dfxml \
 	    damage_sample.img.mapfile \
 	    __$@
@@ -85,8 +85,8 @@ diskimage.report.html: \
   $(top_srcdir)/src/intact_byte_run_index.py \
   $(top_srcdir)/src/report_file_recoverability_html.py \
   diskimage.dfxml
-	source $(top_srcdir)/venv/bin/activate ; \
-	  python $(top_srcdir)/src/report_file_recoverability_html.py \
+	source $(top_srcdir)/tests/venv/bin/activate \
+	  && python $(top_srcdir)/src/report_file_recoverability_html.py \
 	    --debug \
 	    diskimage.dfxml \
 	    > _$@
@@ -110,8 +110,8 @@ file_recoverability.dfxml: \
   $(top_srcdir)/src/make_file_recoverability_dfxml.py \
   diskimage.dfxml \
   sample_file_system.dfxml
-	source $(top_srcdir)/venv/bin/activate ; \
-	  python $(top_srcdir)/src/make_file_recoverability_dfxml.py \
+	source $(top_srcdir)/tests/venv/bin/activate \
+	  && python $(top_srcdir)/src/make_file_recoverability_dfxml.py \
 	    --debug \
 	    --disk-image-dfxml diskimage.dfxml \
 	    sample_file_system.dfxml \
@@ -124,8 +124,8 @@ file_recoverability.report.html: \
   $(top_srcdir)/src/intact_byte_run_index.py \
   $(top_srcdir)/src/report_file_recoverability_html.py \
   file_recoverability.dfxml
-	source $(top_srcdir)/venv/bin/activate ; \
-	  python $(top_srcdir)/src/report_file_recoverability_html.py \
+	source $(top_srcdir)/tests/venv/bin/activate \
+	  && python $(top_srcdir)/src/report_file_recoverability_html.py \
 	    --debug \
 	    file_recoverability.dfxml \
 	    > _$@
@@ -143,16 +143,16 @@ file_recoverability.report.md: \
 non_recoverable_files.txt: \
   file_recoverability.dfxml \
   list_filenames.py
-	source $(top_srcdir)/venv/bin/activate ; \
-	  python list_filenames.py \
+	source $(top_srcdir)/tests/venv/bin/activate \
+	  && python list_filenames.py \
 	    file_recoverability.dfxml \
 	    > _$@
 	mv _$@ $@
 
 sample_file_system.dfxml: \
   sample_file_system_dfxml.py
-	source $(top_srcdir)/venv/bin/activate ; \
-	  python sample_file_system_dfxml.py \
+	source $(top_srcdir)/tests/venv/bin/activate \
+	  && python sample_file_system_dfxml.py \
 	    | xmllint --format - \
 	      > _$@
 	mv _$@ $@
