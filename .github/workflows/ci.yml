@@ -35,6 +35,10 @@ jobs:
       run: |
         pip -q install pre-commit
         pre-commit run --all-files
+    - name: Install xmllint
+      run: |
+        sudo apt-get update
+        sudo apt-get install --yes libxml2-utils
     - name: Start from clean state
       run: make clean
     - name: Run tests
