@@ -13,15 +13,7 @@
 
 SHELL := /bin/bash
 
-PYTHON3 ?= $(shell which python3 2>/dev/null || which python3.8 2>/dev/null || which python3.7 2>/dev/null || which python3.6)
-ifeq ($(PYTHON3),)
-$(error Python 3 not found)
-endif
-
-VIRTUALENV ?= $(shell which virtualenv-3.8 2>/dev/null || which virtualenv-3.7 2>/dev/null || which virtualenv-3.6 2>/dev/null || which virtualenv)
-ifeq ($(VIRTUALENV),)
-$(error virtualenv not found)
-endif
+PYTHON3 ?= python3
 
 all:
 
@@ -45,11 +37,18 @@ all:
 .venv.done.log: \
   .git_submodule_init.done.log \
   requirements.txt
-	$(VIRTUALENV) \
-	  --python=$(PYTHON3) \
+	rm -rf \
 	  venv
-	source venv/bin/activate ; \
-	  pip install \
+	$(PYTHON3) -m venv \
+	  venv
+	source venv/bin/activate \
+	  && pip install \
+	    --upgrade \
+	    pip \
+	    setuptools \
+	    wheel
+	source venv/bin/activate \
+	  && pip install \
 	    -r requirements.txt
 	touch $@
 
