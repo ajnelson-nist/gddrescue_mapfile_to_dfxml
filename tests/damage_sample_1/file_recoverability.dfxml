@@ -13,7 +13,6 @@
     <library name="dfxml" version="1.0.2"/>
     <library name="dfxml.objects" version="0.12.0"/>
     <library name="portion" version="2.2.0"/>
-    <library name="intact_byte_run_index.py" version="0.1.0"/>
   </creator>
   <diskimageobject>
     <filesize>1000204886016</filesize>
