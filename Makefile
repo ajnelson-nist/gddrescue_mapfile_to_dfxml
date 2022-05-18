@@ -33,27 +33,6 @@ all: \
 	  .git_submodule_init.done.log
 	touch $@
 
-.venv.done.log: \
-  .git_submodule_init.done.log \
-  requirements.txt
-	rm -rf \
-	  venv
-	$(PYTHON3) -m venv \
-	  venv
-	source venv/bin/activate \
-	  && pip install \
-	    --upgrade \
-	    pip \
-	    setuptools \
-	    wheel
-	source venv/bin/activate \
-	  && pip install \
-	    deps/dfxml
-	source venv/bin/activate \
-	  && pip install \
-	    --requirement requirements.txt
-	touch $@
-
 # This virtual environment is meant to be built once and then persist, even through 'make clean'.
 # If a recipe is written to remove this flag file, it should first run `pre-commit uninstall`.
 .venv-pre-commit/var/.pre-commit-built.log:
@@ -78,9 +57,10 @@ all: \
 	touch $@
 
 check: \
-  .venv.done.log \
+  .git_submodule_init.done.log \
   .venv-pre-commit/var/.pre-commit-built.log
 	$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
 	  --directory tests \
 	  check
 
@@ -93,17 +73,16 @@ check-docs-figs:
 	  --directory figs \
 	  check
 
-check-docs-tests: \
-  .venv.done.log
+check-docs-tests:
 	$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
 	  --directory tests \
 	  check-docs
 
 clean:
-	@rm -rf venv
-	@rm -f .*.done.log
 	@$(MAKE) --directory figs clean
 	@$(MAKE) --directory tests clean
+	@rm -f .*.done.log
 
 docs: \
   docs-figs \
@@ -115,8 +94,12 @@ docs-figs:
 
 docs-tests:
 	$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
 	  --directory tests \
 	  docs
 
-download: \
-  .venv.done.log
+download:
+	$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
+	  --directory tests \
+	  .venv.done.log

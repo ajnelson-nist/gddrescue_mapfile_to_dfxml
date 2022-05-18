@@ -4,10 +4,10 @@
     <dc:type>Disk image sector map</dc:type>
   </metadata>
   <creator>
-    <program>../../src/gddrescue_mapfile_to_dfxml.py</program>
+    <program>gddrescue_mapfile_to_dfxml</program>
     <version>0.1.0</version>
     <execution_environment>
-      <command_line>../../src/gddrescue_mapfile_to_dfxml.py damage_sample.img.mapfile __diskimage.dfxml</command_line>
+      <command_line>gddrescue_mapfile_to_dfxml damage_sample.img.mapfile __diskimage.dfxml</command_line>
     </execution_environment>
     <library name="Python" version="3.8.9"/>
     <library name="Objects.py" version="0.12.0"/>

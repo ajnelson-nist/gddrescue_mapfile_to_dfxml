@@ -1,6 +1,8 @@
 *.done.log
+*.egg-info
 *.pyc
 *.swp
 .DS_Store
 .venv-pre-commit
+build
 venv
