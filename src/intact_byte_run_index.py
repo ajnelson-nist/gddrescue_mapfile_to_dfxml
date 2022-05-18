@@ -18,9 +18,7 @@ import collections
 import logging
 import os
 
-# Following style guidance of documentation:
-#   https://pypi.org/project/python-intervals
-import intervals as I
+import portion
 
 from dfxml import objects as Objects
 
@@ -50,10 +48,10 @@ class IntactByteRunIndex(object):
             return None
         if input_length is None:
             return None
-        input_interval = I.closedopen(input_offset, input_offset + input_length)
+        input_interval = portion.closedopen(input_offset, input_offset + input_length)
         filtered_interval = self.intervals & input_interval
         retval = []
-        if filtered_interval.is_empty():
+        if filtered_interval.empty:
             return retval
         try:
             for atomic_interval in filtered_interval:
@@ -79,14 +77,14 @@ class IntactByteRunIndex(object):
             raise ValueError("Index can only be loaded once. (.ingest_byte_runs() method was called twice.)")
 
         # Prime intervals data structure with first byte run.
-        self.intervals = I.closedopen(brs[0].img_offset, brs[0].img_offset + brs[0].len)
+        self.intervals = portion.closedopen(brs[0].img_offset, brs[0].img_offset + brs[0].len)
 
         # Append remaining runs.
         for br in brs[1:]:
             # TODO Make this a little more user-friendly.
             assert not br.img_offset is None
             assert not br.len is None
-            self.intervals |= I.closedopen(br.img_offset, br.img_offset + br.len)
+            self.intervals |= portion.closedopen(br.img_offset, br.img_offset + br.len)
         #_logger.debug("self.intervals = %r." % self.intervals)
 
     def is_byte_run_contained(self, input_byte_run):
@@ -102,18 +100,18 @@ class IntactByteRunIndex(object):
             return None
         if input_length is None:
             return None
-        input_interval = I.closedopen(input_offset, input_offset + input_length)
+        input_interval = portion.closedopen(input_offset, input_offset + input_length)
         return input_interval in self.intervals
 
     @property
     def intervals(self):
         """
-        This is a single intervals.Interval instance.  It is expected to frequently be a sequence of interval.AtomicInterval, so it will always be safe to iterate over this property and operate on each AtomicInterval.
+        This is a single portion.Interval instance.  It is expected to frequently be a sequence of portion.AtomicInterval, so it will always be safe to iterate over this property and operate on each AtomicInterval.
         """
         return self._intervals
 
     @intervals.setter
     def intervals(self, value):
         assert value is None or \
-          isinstance(value, I.Interval)
+          isinstance(value, portion.Interval)
         self._intervals = value
