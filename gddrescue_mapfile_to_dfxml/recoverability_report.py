@@ -11,22 +11,6 @@
 #
 # We would appreciate acknowledgement if the software is used.
 
-"""
-This script provides a HTML report reporting the impact of sectors not captured from the original file system, according to a byte run aware DFXML map.
-
-Relies on image filesize being recorded in diskimageobject element (a feature under draft for DFXML version 1.3.0).
-
-Assumes that, for the diskimageobject's byte runs, only byte runs listed in the input DFXML are present in the disk image.
-
-If file objects are presented in the input DFXML file as well, tables will be emitted for the listed file systems and files.  These files are assumed to be in the supplied DFXML because of being at least partially non-recoverable according to unavailable disk image sectors.
-
-Generally, this script expects to receive DFXML generated (or combined) by the script make_file_recoverability_dfxml.py.
-
-Prints HTML5 report to stdout.
-"""
-
-__version__ = "0.1.0"
-
 import argparse
 import locale
 import logging
@@ -35,7 +19,7 @@ import typing
 
 from dfxml import objects as Objects
 
-import intact_byte_run_index
+import gddrescue_mapfile_to_dfxml.intact_byte_run_index
 
 HAVE_HUMANFRIENDLY = False
 try:
@@ -52,14 +36,29 @@ locale.setlocale(locale.LC_ALL, "")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    _description = """
+This script provides a HTML report reporting the impact of sectors not captured from the original file system, according to a byte run aware DFXML map.
+
+Relies on image filesize being recorded in diskimageobject element (a feature under draft for DFXML version 1.3.0).
+
+Assumes that, for the diskimageobject's byte runs, only byte runs listed in the input DFXML are present in the disk image.
+
+If file objects are presented in the input DFXML file as well, tables will be emitted for the listed file systems and files.  These files are assumed to be in the supplied DFXML because of being at least partially non-recoverable according to unavailable disk image sectors.
+
+Generally, this script expects to receive DFXML generated (or combined) by the script make_file_recoverability_dfxml.py.
+
+Prints HTML5 report to stdout."""
+
+    parser = argparse.ArgumentParser(
+        description=_description, formatter_class=argparse.RawTextHelpFormatter
+    )
     parser.add_argument("-d", "--debug", action="store_true")
     parser.add_argument("disk_image_dfxml")
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
 
-    br_index = intact_byte_run_index.IntactByteRunIndex()
+    br_index = gddrescue_mapfile_to_dfxml.intact_byte_run_index.IntactByteRunIndex()
 
     original_disk_size = None
     disk_summary_message = None

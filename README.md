@@ -19,7 +19,8 @@ The views and opinions expressed in this project are those of the authors and do
 This repository is scoped to supporting the following general form of workflow, which starts with a disk image and ends with a report of how damaged regions of the original disk affect the imaged file system.
 1. Starting with a disk, take an image with `ddrescue`.  This produces a disk image, which may be incomplete, and a mapfile reporting imaging status.
 2. Run `gddrescue_mapfile_to_dfxml` on the mapfile from step 1.  This emits a DFXML file that only summarizes the disk image's geometry, without delving into file systems.
-3. A simpler HTML report counting the lost bytes can be generated from the DFXML of step 2, by running [`report_file_recoverability_html.py`](src/report_file_recoverability_html.py).
+3. A simpler HTML report counting the lost bytes can be generated from the DFXML of step 2, by running [`gddrescue_dfxml_recoverability_report`](gddrescue_mapfile_to_dfxml/recoverability_report.py).
+
 
 The above gives a simple summary for when a full file system analysis is not performed.
 

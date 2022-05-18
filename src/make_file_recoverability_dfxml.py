@@ -27,7 +27,7 @@ import typing
 import dfxml
 from dfxml import objects as Objects
 
-import intact_byte_run_index
+import gddrescue_mapfile_to_dfxml.intact_byte_run_index
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
@@ -63,16 +63,13 @@ def main() -> None:
     dobj.add_creator_library("dfxml", dfxml.__version__)
     dobj.add_creator_library("dfxml.objects", Objects.__version__)
     dobj.add_creator_library("portion", get_portion_version())
-    dobj.add_creator_library(
-        "intact_byte_run_index.py", intact_byte_run_index.__version__
-    )
 
     if args.disk_image_dfxml:
         disk_image_dfxml = args.disk_image_dfxml
     else:
         disk_image_dfxml = args.files_dfxml
 
-    br_index = intact_byte_run_index.IntactByteRunIndex()
+    br_index = gddrescue_mapfile_to_dfxml.intact_byte_run_index.IntactByteRunIndex()
 
     diobj: typing.Optional[Objects.DiskImageObject] = None
     # Index the byte runs of the disk image.

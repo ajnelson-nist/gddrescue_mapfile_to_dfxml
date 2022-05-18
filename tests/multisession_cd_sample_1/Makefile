@@ -58,10 +58,11 @@ diskimage.dfxml: \
 	mv _$@ $@
 
 diskimage.report.html: \
-  $(top_srcdir)/src/report_file_recoverability_html.py \
+  $(top_srcdir)/gddrescue_mapfile_to_dfxml/intact_byte_run_index.py \
+  $(top_srcdir)/gddrescue_mapfile_to_dfxml/recoverability_report.py \
   diskimage.dfxml
 	source $(top_srcdir)/tests/venv/bin/activate \
-	  && python $(top_srcdir)/src/report_file_recoverability_html.py \
+	  && gddrescue_dfxml_recovery_report \
 	    diskimage.dfxml \
 	    > _$@
 	mv _$@ $@
