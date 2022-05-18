@@ -108,6 +108,7 @@ docs: \
 file_recoverability.dfxml: \
   $(top_srcdir)/src/intact_byte_run_index.py \
   $(top_srcdir)/src/make_file_recoverability_dfxml.py \
+  $(top_srcdir)/tests/.venv.done.log \
   diskimage.dfxml \
   sample_file_system.dfxml
 	source $(top_srcdir)/tests/venv/bin/activate \
@@ -150,6 +151,7 @@ non_recoverable_files.txt: \
 	mv _$@ $@
 
 sample_file_system.dfxml: \
+  $(top_srcdir)/tests/.venv.done.log \
   sample_file_system_dfxml.py
 	source $(top_srcdir)/tests/venv/bin/activate \
 	  && python sample_file_system_dfxml.py \

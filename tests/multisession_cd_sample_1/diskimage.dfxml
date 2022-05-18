@@ -10,8 +10,8 @@
       <command_line>gddrescue_mapfile_to_dfxml disk.img.mapfile __diskimage.dfxml</command_line>
     </execution_environment>
     <library name="Python" version="3.8.9"/>
-    <library name="Objects.py" version="0.12.0"/>
-    <library name="dfxml.py" version="1.0.2"/>
+    <library name="dfxml" version="1.0.2"/>
+    <library name="dfxml.objects" version="0.12.0"/>
   </creator>
   <diskimageobject>
     <filesize>500512768</filesize>
