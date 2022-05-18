@@ -128,7 +128,7 @@ class MapfileParser(object):
 
     def transition(self, to_state: ParseState) -> None:
         assert self._state is not None
-        if not to_state in STATE_TRANSMISSION_MATRIX[self._state]:
+        if to_state not in STATE_TRANSMISSION_MATRIX[self._state]:
             assert self._line_no is not None
             _logger.info("self._line_no = %d.", self._line_no)
             raise ValueError(

@@ -13,8 +13,6 @@
 
 __version__ = "0.1.0"
 
-import bisect
-import collections
 import logging
 import os
 import typing
@@ -67,7 +65,7 @@ class IntactByteRunIndex(object):
                         atomic_interval.upper - atomic_interval.lower,
                     )
                 )
-        except:
+        except Exception:
             _logger.debug("filtered_interval = %r." % filtered_interval)
             raise
         return retval
@@ -82,7 +80,7 @@ class IntactByteRunIndex(object):
         if len(brs) == 0 or brs[0].img_offset is None or brs[0].len is None:
             raise ValueError("Byte run list not ingestable.")
 
-        if not self.intervals is None:
+        if self.intervals is not None:
             raise ValueError(
                 "Index can only be loaded once. (.ingest_byte_runs() method was called twice.)"
             )
@@ -95,8 +93,8 @@ class IntactByteRunIndex(object):
         # Append remaining runs.
         for br in brs[1:]:
             # TODO Make this a little more user-friendly.
-            assert not br.img_offset is None
-            assert not br.len is None
+            assert br.img_offset is not None
+            assert br.len is not None
             self.intervals |= portion.closedopen(br.img_offset, br.img_offset + br.len)
         # _logger.debug("self.intervals = %r." % self.intervals)
 

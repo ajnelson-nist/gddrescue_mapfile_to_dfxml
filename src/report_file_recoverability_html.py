@@ -33,17 +33,17 @@ import logging
 import locale
 import typing
 
+from dfxml import objects as Objects
+
+import intact_byte_run_index
+
 HAVE_HUMANFRIENDLY = False
 try:
     import humanfriendly  # type: ignore
 
     HAVE_HUMANFRIENDLY = True
-except:
+except ImportError:
     pass
-
-from dfxml import objects as Objects
-
-import intact_byte_run_index
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
