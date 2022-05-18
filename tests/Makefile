@@ -27,10 +27,10 @@ all:
   docs-multisession_cd_sample_1
 
 .check-dfxml-loads.done.log: \
-  $(top_srcdir)/src/gddrescue_mapfile_to_dfxml.py \
-  $(top_srcdir)/.venv.done.log
-	source $(top_srcdir)/venv/bin/activate ; \
-	  python $(top_srcdir)/src/gddrescue_mapfile_to_dfxml.py \
+  $(top_srcdir)/.venv.done.log \
+  $(top_srcdir)/gddrescue_mapfile_to_dfxml/cli.py
+	source $(top_srcdir)/venv/bin/activate \
+	  && gddrescue_mapfile_to_dfxml \
 	    --help \
 	    > /dev/null
 	touch $@

@@ -35,7 +35,7 @@ all: \
 
 .venv.done.log: \
   .git_submodule_init.done.log \
-  requirements.txt
+  setup.cfg
 	rm -rf \
 	  venv
 	$(PYTHON3) -m venv \
@@ -51,7 +51,8 @@ all: \
 	    deps/dfxml
 	source venv/bin/activate \
 	  && pip install \
-	    --requirement requirements.txt
+	    --editable \
+	    .
 	touch $@
 
 # This virtual environment is meant to be built once and then persist, even through 'make clean'.

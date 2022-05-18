@@ -46,10 +46,11 @@ clean:
 	@rm -f *.dfxml diskimage.report.md
 
 diskimage.dfxml: \
+  $(top_srcdir)/gddrescue_mapfile_to_dfxml/cli.py \
   ../.check-dfxml-loads.done.log \
   disk.img.mapfile
-	source $(top_srcdir)/venv/bin/activate ; \
-	  python $(top_srcdir)/src/gddrescue_mapfile_to_dfxml.py \
+	source $(top_srcdir)/venv/bin/activate \
+	  && gddrescue_mapfile_to_dfxml \
 	    disk.img.mapfile \
 	    __$@
 	xmllint --format __$@ > _$@

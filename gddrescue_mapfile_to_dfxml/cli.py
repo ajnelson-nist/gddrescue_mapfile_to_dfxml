@@ -15,14 +15,15 @@
 The GNU ddrescue mapfile format reports a status character for every block in a disk image.  For the purposes of analyzing data in the disk image, the relevant status character is "+", indicating a "finished block" - an imaged block.  Everything else is effectively an unretrieved, or unretrievable, block.
 """
 
-__version__ = "0.1.0"
-
+import argparse
 import os
 import sys
 import logging
 import enum
 
 from dfxml import objects as Objects
+
+import gddrescue_mapfile_to_dfxml
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
@@ -58,10 +59,15 @@ class MapfileParser(object):
         """
         Returns a DFXMLObject.
         """
+        command_parts = []
+        command_name_basename = os.path.basename(sys.argv[0])
+        command_parts.append(command_name_basename)
+        command_parts.extend(sys.argv[1:])
+
         dobj = Objects.DFXMLObject(version="1.2.0+")
-        dobj.program = sys.argv[0]
-        dobj.program_version = __version__
-        dobj.command_line = " ".join(sys.argv)
+        dobj.program = command_name_basename
+        dobj.program_version = gddrescue_mapfile_to_dfxml.__version__
+        dobj.command_line = " ".join(command_parts)
         dobj.dc["type"] = "Disk image sector map"
         dobj.add_creator_library(
             "Python", ".".join(map(str, sys.version_info[0:3]))
@@ -128,6 +134,14 @@ class MapfileParser(object):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--debug", action="store_true")
+    parser.add_argument("in_mapfile")
+    parser.add_argument("out_dfxml")
+    args = parser.parse_args()
+
+    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
+
     with open(args.out_dfxml, "w") as out_fh:
         with open(args.in_mapfile, "r") as in_fh:
             parser = MapfileParser()
@@ -136,12 +150,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--debug", action="store_true")
-    parser.add_argument("in_mapfile")
-    parser.add_argument("out_dfxml")
-    args = parser.parse_args()
-    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
     main()
