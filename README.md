@@ -2,9 +2,11 @@
 
 This repository implements a converter for [GNU ddrescue](https://www.gnu.org/software/ddrescue/)'s [mapfile](https://www.gnu.org/software/ddrescue/manual/ddrescue_manual.html#Mapfile-structure).  In short, the mapfile is a log of the results of trying to read data regions from a storage medium into a disk image file.  This repository translates that log file into a [DFXML](https://github.com/dfxml-working-group/dfxml_schema/) document, using the `byte_runs` list of a `diskimageobject` element to represent regions that were and were not copied into the disk image file.
 
-The primary script supplied by this repository is [`gddrescue_mapfile_to_dfxml.py`](src/gddrescue_mapfile_to_dfxml.py).
+The primary command supplied by this repository is [`gddrescue_mapfile_to_dfxml`](gddrescue_mapfile_to_dfxml/cli.py).
 
 Development and testing is example-driven.  The mapfile parsing was written based on available samples, some of which are provided as test data.
+
+Feedback is welcome, as are [contributions](CONTRIBUTE.md).
 
 
 ## Disclaimer
@@ -16,7 +18,7 @@ The views and opinions expressed in this project are those of the authors and do
 
 This repository is scoped to supporting the following general form of workflow, which starts with a disk image and ends with a report of how damaged regions of the original disk affect the imaged file system.
 1. Starting with a disk, take an image with `ddrescue`.  This produces a disk image, which may be incomplete, and a mapfile reporting imaging status.
-2. Run [`gddrescue_mapfile_to_dfxml.py`](src/gddrescue_mapfile_to_dfxml.py) on the mapfile from step 1.  This emits a DFXML file that only summarizes the disk image's geometry, without delving into file systems.
+2. Run `gddrescue_mapfile_to_dfxml` on the mapfile from step 1.  This emits a DFXML file that only summarizes the disk image's geometry, without delving into file systems.
 3. A simpler HTML report counting the lost bytes can be generated from the DFXML of step 2, by running [`report_file_recoverability_html.py`](src/report_file_recoverability_html.py).
 
 The above gives a simple summary for when a full file system analysis is not performed.
@@ -74,7 +76,7 @@ This repository also has two scripts and a library that *may be migrated* into t
 * [`src/make_file_recoverability_dfxml.py`](src/make_file_recoverability_dfxml.py) - a script that identifies files not fully present in an acquired disk image.  Emits a manifest of files as DFXML.
 * [`src/report_file_recoverability_html.py`](src/report_file_recoverability_html.py) - a script that 
 
-When a DFXML generator of the same scope as `gddrescue_mapfile_to_dfxml.py` is written for another tool, the above scripts are likely to migrate.
+When a DFXML generator of the same scope as `gddrescue_mapfile_to_dfxml` is written for another tool, the above scripts are likely to migrate.
 
 
 ## Versioning
