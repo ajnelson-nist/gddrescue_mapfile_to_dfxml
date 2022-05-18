@@ -10,7 +10,7 @@
       <command_line>sample_file_system_dfxml.py</command_line>
     </execution_environment>
     <library name="Python" version="3.8.9"/>
-    <library name="Objects.py" version="0.12.0"/>
+    <library name="objects.py" version="0.12.0"/>
     <library name="dfxml.py" version="1.0.2"/>
   </creator>
   <volume>
