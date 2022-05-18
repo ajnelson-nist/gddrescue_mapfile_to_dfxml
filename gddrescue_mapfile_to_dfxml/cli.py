@@ -138,7 +138,10 @@ class MapfileParser(object):
 
 
 def main() -> None:
-    argument_parser = argparse.ArgumentParser()
+    argument_parser = argparse.ArgumentParser(
+        description="This program converts a GNU ddrescue Mapfile into a DFXML render of the recovery status of a disk image."
+    )
+
     argument_parser.add_argument("-d", "--debug", action="store_true")
     argument_parser.add_argument("in_mapfile")
     argument_parser.add_argument("out_dfxml")
