@@ -20,12 +20,32 @@ __version__ = "0.1.0"
 import sys
 import logging
 import os
+import subprocess
+import typing
 
 from dfxml import objects as Objects
 
 import intact_byte_run_index
 
 _logger = logging.getLogger(os.path.basename(__file__))
+
+
+def get_portion_version() -> str:
+    """
+    portion does not currently provide portion.__version__.  Rather than parse portion's setup.py, review pip output.
+    """
+    pip_list_stdout: bytes = subprocess.check_output(["pip", "list"])
+    version_string: typing.Optional[str] = None
+    for byte_line in pip_list_stdout.split(b"\n"):
+        if not byte_line.startswith(b"portion "):
+            continue
+        version_part = byte_line[len("portion"):].strip()
+        version_string = version_part.decode("ascii")
+        break
+    if version_string is None:
+        raise ValueError("portion package not found from pip listing.")
+    return version_string
+
 
 def main():
     # Initialize output object.
@@ -38,7 +58,7 @@ def main():
     dobj.add_creator_library("Python", ".".join(map(str, sys.version_info[0:3]))) #A bit of a bend, but gets the major version information out.
     dobj.add_creator_library("objects.py", Objects.__version__)
     dobj.add_creator_library("dfxml.py", Objects.dfxml.__version__)
-    dobj.add_creator_library("intervals.py", intact_byte_run_index.I.__version__)
+    dobj.add_creator_library("portion", get_portion_version())
     dobj.add_creator_library("intact_byte_run_index.py", intact_byte_run_index.__version__)
 
     if args.disk_image_dfxml:

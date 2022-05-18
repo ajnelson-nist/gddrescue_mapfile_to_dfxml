@@ -9,14 +9,14 @@
     <execution_environment>
       <command_line>../../src/gddrescue_mapfile_to_dfxml.py disk.img.mapfile __diskimage.dfxml</command_line>
     </execution_environment>
-    <library name="Python" version="3.8.0"/>
+    <library name="Python" version="3.8.9"/>
     <library name="Objects.py" version="0.9.0"/>
     <library name="dfxml.py" version="1.0.2"/>
   </creator>
   <diskimageobject>
     <filesize>500512768</filesize>
     <byte_runs>
-      <byte_run img_offset="461512704" len="39000064"/>
+      <byte_run len="39000064" img_offset="461512704"/>
     </byte_runs>
   </diskimageobject>
 </dfxml>

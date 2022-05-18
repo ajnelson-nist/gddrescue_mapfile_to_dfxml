@@ -9,21 +9,21 @@
     <execution_environment>
       <command_line>../../src/make_file_recoverability_dfxml.py --debug --disk-image-dfxml diskimage.dfxml sample_file_system.dfxml __file_recoverability.dfxml</command_line>
     </execution_environment>
-    <library name="Python" version="3.8.0"/>
+    <library name="Python" version="3.8.9"/>
     <library name="objects.py" version="0.9.0"/>
     <library name="dfxml.py" version="1.0.2"/>
-    <library name="intervals.py" version="1.10.0"/>
+    <library name="portion" version="2.2.0"/>
     <library name="intact_byte_run_index.py" version="0.1.0"/>
   </creator>
   <diskimageobject>
     <filesize>1000204886016</filesize>
     <byte_runs>
-      <byte_run img_offset="512" len="429496729088"/>
-      <byte_run img_offset="430570471424" len="569634414592"/>
+      <byte_run len="429496729088" img_offset="512"/>
+      <byte_run len="569634414592" img_offset="430570471424"/>
     </byte_runs>
     <volume>
       <byte_runs>
-        <byte_run img_offset="10485760" len="1000194400256"/>
+        <byte_run len="1000194400256" img_offset="10485760"/>
       </byte_runs>
       <ftype_str>examplefs</ftype_str>
       <fileobject>
@@ -32,7 +32,7 @@
         <filesize>512</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="0" len="512"/>
+          <byte_run len="512" img_offset="0"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -41,7 +41,7 @@
         <filesize>4000</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="0" len="4000"/>
+          <byte_run len="4000" img_offset="0"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -50,7 +50,7 @@
         <filesize>8192</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="429496725504" len="8192"/>
+          <byte_run len="8192" img_offset="429496725504"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -59,7 +59,7 @@
         <filesize>4096</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="429496733696" len="4096"/>
+          <byte_run len="4096" img_offset="429496733696"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -68,7 +68,7 @@
         <filesize>8192</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="430570467328" len="8192"/>
+          <byte_run len="8192" img_offset="430570467328"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -77,9 +77,9 @@
         <filesize>12288</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="429496770560" len="4096"/>
-          <byte_run img_offset="429496811520" len="4096"/>
-          <byte_run img_offset="429496852480" len="4096"/>
+          <byte_run len="4096" img_offset="429496770560"/>
+          <byte_run len="4096" img_offset="429496811520"/>
+          <byte_run len="4096" img_offset="429496852480"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -88,8 +88,8 @@
         <filesize>8192</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="429496893440" len="4096"/>
-          <byte_run img_offset="430570635264" len="4096"/>
+          <byte_run len="4096" img_offset="429496893440"/>
+          <byte_run len="4096" img_offset="430570635264"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -98,9 +98,9 @@
         <filesize>12288</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="10690560" len="4096"/>
-          <byte_run img_offset="429496934400" len="4096"/>
-          <byte_run img_offset="430570676224" len="4096"/>
+          <byte_run len="4096" img_offset="10690560"/>
+          <byte_run len="4096" img_offset="429496934400"/>
+          <byte_run len="4096" img_offset="430570676224"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -109,8 +109,8 @@
         <filesize>8192</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="10731520" len="4096"/>
-          <byte_run img_offset="429496975360" len="4096"/>
+          <byte_run len="4096" img_offset="10731520"/>
+          <byte_run len="4096" img_offset="429496975360"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -119,7 +119,7 @@
         <filesize>4096</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="1000208982016" len="4096"/>
+          <byte_run len="4096" img_offset="1000208982016"/>
         </byte_runs>
       </fileobject>
       <fileobject>
@@ -128,9 +128,9 @@
         <filesize>12288</filesize>
         <alloc>1</alloc>
         <byte_runs>
-          <byte_run img_offset="11182080" len="4096"/>
-          <byte_run img_offset="429497425920" len="4096"/>
-          <byte_run img_offset="430571167744" len="4096"/>
+          <byte_run len="4096" img_offset="11182080"/>
+          <byte_run len="4096" img_offset="429497425920"/>
+          <byte_run len="4096" img_offset="430571167744"/>
         </byte_runs>
       </fileobject>
     </volume>
