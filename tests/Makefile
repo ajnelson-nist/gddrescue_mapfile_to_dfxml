@@ -25,6 +25,7 @@ all:
   check-docs-damage_sample_1 \
   check-docs-multisession_cd_sample_1 \
   check-multisession_cd_sample_1 \
+  check-mypy \
   docs-damage_sample_1 \
   docs-multisession_cd_sample_1
 
@@ -39,7 +40,8 @@ all:
 
 .venv.done.log: \
   $(top_srcdir)/.git_submodule_init.done.log \
-  $(top_srcdir)/setup.cfg
+  $(top_srcdir)/setup.cfg \
+  requirements.txt
 	rm -rf \
 	  venv
 	$(PYTHON3) -m venv \
@@ -57,11 +59,15 @@ all:
 	  && pip install \
 	    --editable \
 	    $(top_srcdir)
+	source venv/bin/activate \
+	  && pip install \
+	    --requirement requirements.txt
 	touch $@
 
 check: \
   check-damage_sample_1 \
-  check-multisession_cd_sample_1
+  check-multisession_cd_sample_1 \
+  check-mypy
 
 check-damage_sample_1: \
   .check-dfxml-loads.done.log
@@ -90,6 +96,14 @@ check-multisession_cd_sample_1: \
 	$(MAKE) \
 	  --directory multisession_cd_sample_1 \
 	  check
+
+check-mypy: \
+  .venv.done.log
+	source venv/bin/activate \
+	  && mypy \
+	    --strict \
+	    $(top_srcdir)/gddrescue_mapfile_to_dfxml \
+	    .
 
 clean:
 	@$(MAKE) --directory damage_sample_1 clean
