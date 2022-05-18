@@ -24,14 +24,12 @@ all:
   docs-tests
 
 .git_submodule_init.done.log: \
-  .git_submodule_init-dfxml.done.log
-	touch $@
-
-.git_submodule_init-dfxml.done.log:
+  .gitmodules
 	git submodule init deps/dfxml
 	git submodule update deps/dfxml
-	pushd deps/dfxml ; \
-	  make schema-init
+	$(MAKE) \
+	  --directory deps/dfxml \
+	  .git_submodule_init.done.log
 	touch $@
 
 .venv.done.log: \
@@ -49,7 +47,10 @@ all:
 	    wheel
 	source venv/bin/activate \
 	  && pip install \
-	    -r requirements.txt
+	    deps/dfxml
+	source venv/bin/activate \
+	  && pip install \
+	    --requirement requirements.txt
 	touch $@
 
 check: \
