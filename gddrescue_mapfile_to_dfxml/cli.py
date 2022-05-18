@@ -18,9 +18,11 @@ The GNU ddrescue mapfile format reports a status character for every block in a 
 import argparse
 import os
 import sys
+import typing
 import logging
 import enum
 
+import dfxml
 from dfxml import objects as Objects
 
 import gddrescue_mapfile_to_dfxml
@@ -38,7 +40,7 @@ class ParseState(enum.Enum):
     STREAM_COMPLETE = 99
 
 
-STATE_TRANSMISSION_MATRIX = {
+STATE_TRANSMISSION_MATRIX: typing.Dict[ParseState, typing.Set[ParseState]] = {
     ParseState.CURRENT_POS_HEAD: {ParseState.CURRENT_POS_RECORD},
     ParseState.CURRENT_POS_RECORD: {ParseState.TABLE_HEAD},
     ParseState.FILE_OPENED: {ParseState.PRE_TABLE},
@@ -50,12 +52,12 @@ STATE_TRANSMISSION_MATRIX = {
 
 
 class MapfileParser(object):
-    def __init__(self):
-        self._disk_image_len = None
-        self._state = None
-        self._line_no = None
+    def __init__(self) -> None:
+        self._disk_image_len: typing.Optional[int] = None
+        self._state: typing.Optional[ParseState] = None
+        self._line_no: typing.Optional[int] = None
 
-    def parse(self, in_fh):
+    def parse(self, in_fh: typing.TextIO) -> Objects.DFXMLObject:
         """
         Returns a DFXMLObject.
         """
@@ -73,13 +75,13 @@ class MapfileParser(object):
             "Python", ".".join(map(str, sys.version_info[0:3]))
         )  # A bit of a bend, but gets the major version information out.
         dobj.add_creator_library("Objects.py", Objects.__version__)
-        dobj.add_creator_library("dfxml.py", Objects.dfxml.__version__)
+        dobj.add_creator_library("dfxml.py", dfxml.__version__)
         diobj = Objects.DiskImageObject()
         dobj.append(diobj)
         brs = Objects.ByteRuns()
         diobj.byte_runs = brs
 
-        dobj.add_namespace("gddr", Objects.dfxml.XMLNS_DFXML + "#gddrescue")
+        dobj.add_namespace("gddr", dfxml.XMLNS_DFXML + "#gddrescue")
 
         self._state = ParseState.FILE_OPENED
         self._disk_image_len = 0
@@ -124,21 +126,23 @@ class MapfileParser(object):
         self.transition(ParseState.STREAM_COMPLETE)
         return dobj
 
-    def transition(self, to_state):
+    def transition(self, to_state: ParseState) -> None:
+        assert self._state is not None
         if not to_state in STATE_TRANSMISSION_MATRIX[self._state]:
-            _logger.info("self._line_no = %d." % self._line_no)
+            assert self._line_no is not None
+            _logger.info("self._line_no = %d.", self._line_no)
             raise ValueError(
                 "Unexpected state transition: %r -> %r." % (self._state, to_state)
             )
         self._state = to_state
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--debug", action="store_true")
-    parser.add_argument("in_mapfile")
-    parser.add_argument("out_dfxml")
-    args = parser.parse_args()
+def main() -> None:
+    argument_parser = argparse.ArgumentParser()
+    argument_parser.add_argument("-d", "--debug", action="store_true")
+    argument_parser.add_argument("in_mapfile")
+    argument_parser.add_argument("out_dfxml")
+    args = argument_parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
 
