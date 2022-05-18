@@ -19,6 +19,7 @@ __version__ = "0.1.0"
 
 import sys
 
+import dfxml
 from dfxml import objects as Objects
 
 DISK_IMAGE_SIZE = 1000204886016  # Original disk size
@@ -27,7 +28,7 @@ DAMAGE_REGION_START = 429496729600  # 400GiB
 GOOD_REGION_START = 430570471424  # 401GiB
 
 
-def main():
+def main() -> None:
     dobj = Objects.DFXMLObject(version="1.2.0")
     dobj.program = sys.argv[0]
     dobj.program_version = __version__
@@ -36,8 +37,8 @@ def main():
     dobj.add_creator_library(
         "Python", ".".join(map(str, sys.version_info[0:3]))
     )  # A bit of a bend, but gets the major version information out.
-    dobj.add_creator_library("Objects.py", Objects.__version__)
-    dobj.add_creator_library("dfxml.py", Objects.dfxml.__version__)
+    dobj.add_creator_library("objects.py", Objects.__version__)
+    dobj.add_creator_library("dfxml.py", dfxml.__version__)
 
     vobj = Objects.VolumeObject()
     dobj.append(vobj)

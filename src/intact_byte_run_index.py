@@ -17,8 +17,9 @@ import bisect
 import collections
 import logging
 import os
+import typing
 
-import portion
+import portion  # type: ignore
 
 from dfxml import objects as Objects
 
@@ -30,17 +31,21 @@ class IntactByteRunIndex(object):
     This class helps analyze the intactness of byte run lists.  For convenience, functions are provided that expect either byte run DFXML objects, or the runs expressed as (offset, length) pairs.  The byte run function variants assume the disk image offset (img_offset) is to be used.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._intervals = None
 
-    def filter_byte_run(self, input_byte_run):
+    def filter_byte_run(
+        self, input_byte_run: Objects.ByteRun
+    ) -> typing.Optional[typing.List[typing.Tuple[int, int]]]:
         if input_byte_run.img_offset is None:
             return None
         if input_byte_run.len is None:
             return None
         return self.filter_run_pair((input_byte_run.img_offset, input_byte_run.len))
 
-    def filter_run_pair(self, input_run_pair):
+    def filter_run_pair(
+        self, input_run_pair: typing.Tuple[int, int]
+    ) -> typing.List[typing.Tuple[int, int]]:
         """
         Returns a list of (offset, length) pairs that represent sub-intervals of input_interval, which are present in the index.
         """
@@ -51,7 +56,7 @@ class IntactByteRunIndex(object):
             return None
         input_interval = portion.closedopen(input_offset, input_offset + input_length)
         filtered_interval = self.intervals & input_interval
-        retval = []
+        retval: typing.List[typing.Tuple[int, int]] = []
         if filtered_interval.empty:
             return retval
         try:
@@ -67,7 +72,7 @@ class IntactByteRunIndex(object):
             raise
         return retval
 
-    def ingest_byte_runs(self, brs):
+    def ingest_byte_runs(self, brs: Objects.ByteRuns) -> None:
         """
         This function expects brs to be a dfxml.objects.ByteRuns object.
         """
@@ -95,7 +100,9 @@ class IntactByteRunIndex(object):
             self.intervals |= portion.closedopen(br.img_offset, br.img_offset + br.len)
         # _logger.debug("self.intervals = %r." % self.intervals)
 
-    def is_byte_run_contained(self, input_byte_run):
+    def is_byte_run_contained(
+        self, input_byte_run: Objects.ByteRun
+    ) -> typing.Optional[bool]:
         if input_byte_run.img_offset is None:
             return None
         if input_byte_run.len is None:
@@ -104,7 +111,9 @@ class IntactByteRunIndex(object):
             (input_byte_run.img_offset, input_byte_run.len)
         )
 
-    def is_run_pair_contained(self, input_run_pair):
+    def is_run_pair_contained(
+        self, input_run_pair: typing.Tuple[typing.Optional[int], typing.Optional[int]]
+    ) -> typing.Optional[bool]:
         (input_offset, input_length) = input_run_pair
         if input_offset is None:
             return None
@@ -114,13 +123,13 @@ class IntactByteRunIndex(object):
         return input_interval in self.intervals
 
     @property
-    def intervals(self):
+    def intervals(self):  # type: ignore
         """
         This is a single portion.Interval instance.  It is expected to frequently be a sequence of portion.AtomicInterval, so it will always be safe to iterate over this property and operate on each AtomicInterval.
         """
         return self._intervals
 
     @intervals.setter
-    def intervals(self, value):
+    def intervals(self, value: typing.Optional[portion.Interval]) -> typing.Any:
         assert value is None or isinstance(value, portion.Interval)
         self._intervals = value
