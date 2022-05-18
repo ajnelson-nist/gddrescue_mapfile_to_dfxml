@@ -26,6 +26,7 @@ from dfxml import objects as Objects
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
+
 class ParseState(enum.Enum):
     FILE_OPENED = 0
     PRE_TABLE = 1
@@ -35,29 +36,17 @@ class ParseState(enum.Enum):
     IN_TABLE = 5
     STREAM_COMPLETE = 99
 
+
 STATE_TRANSMISSION_MATRIX = {
-  ParseState.CURRENT_POS_HEAD: {
-    ParseState.CURRENT_POS_RECORD
-  },
-  ParseState.CURRENT_POS_RECORD: {
-    ParseState.TABLE_HEAD
-  },
-  ParseState.FILE_OPENED: {
-    ParseState.PRE_TABLE
-  },
-  ParseState.IN_TABLE: {
-    ParseState.IN_TABLE,
-    ParseState.STREAM_COMPLETE
-  },
-  ParseState.PRE_TABLE: {
-    ParseState.CURRENT_POS_HEAD,
-    ParseState.PRE_TABLE
-  },
-  ParseState.STREAM_COMPLETE: set(),
-  ParseState.TABLE_HEAD: {
-    ParseState.IN_TABLE
-  }
+    ParseState.CURRENT_POS_HEAD: {ParseState.CURRENT_POS_RECORD},
+    ParseState.CURRENT_POS_RECORD: {ParseState.TABLE_HEAD},
+    ParseState.FILE_OPENED: {ParseState.PRE_TABLE},
+    ParseState.IN_TABLE: {ParseState.IN_TABLE, ParseState.STREAM_COMPLETE},
+    ParseState.PRE_TABLE: {ParseState.CURRENT_POS_HEAD, ParseState.PRE_TABLE},
+    ParseState.STREAM_COMPLETE: set(),
+    ParseState.TABLE_HEAD: {ParseState.IN_TABLE},
 }
+
 
 class MapfileParser(object):
     def __init__(self):
@@ -74,7 +63,9 @@ class MapfileParser(object):
         dobj.program_version = __version__
         dobj.command_line = " ".join(sys.argv)
         dobj.dc["type"] = "Disk image sector map"
-        dobj.add_creator_library("Python", ".".join(map(str, sys.version_info[0:3]))) #A bit of a bend, but gets the major version information out.
+        dobj.add_creator_library(
+            "Python", ".".join(map(str, sys.version_info[0:3]))
+        )  # A bit of a bend, but gets the major version information out.
         dobj.add_creator_library("Objects.py", Objects.__version__)
         dobj.add_creator_library("dfxml.py", Objects.dfxml.__version__)
         diobj = Objects.DiskImageObject()
@@ -130,8 +121,11 @@ class MapfileParser(object):
     def transition(self, to_state):
         if not to_state in STATE_TRANSMISSION_MATRIX[self._state]:
             _logger.info("self._line_no = %d." % self._line_no)
-            raise ValueError("Unexpected state transition: %r -> %r." % (self._state, to_state))
+            raise ValueError(
+                "Unexpected state transition: %r -> %r." % (self._state, to_state)
+            )
         self._state = to_state
+
 
 def main():
     with open(args.out_dfxml, "w") as out_fh:
@@ -140,8 +134,10 @@ def main():
             dobj = parser.parse(in_fh)
             dobj.print_dfxml(output_fh=out_fh)
 
+
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--debug", action="store_true")
     parser.add_argument("in_mapfile")

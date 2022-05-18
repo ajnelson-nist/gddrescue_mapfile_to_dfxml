@@ -21,10 +21,11 @@ import sys
 
 from dfxml import objects as Objects
 
-DISK_IMAGE_SIZE     = 1000204886016  # Original disk size
-FILE_SYSTEM_START   =      10485760  # 10MiB
-DAMAGE_REGION_START =  429496729600  # 400GiB
-GOOD_REGION_START   =  430570471424  # 401GiB
+DISK_IMAGE_SIZE = 1000204886016  # Original disk size
+FILE_SYSTEM_START = 10485760  # 10MiB
+DAMAGE_REGION_START = 429496729600  # 400GiB
+GOOD_REGION_START = 430570471424  # 401GiB
+
 
 def main():
     dobj = Objects.DFXMLObject(version="1.2.0")
@@ -32,7 +33,9 @@ def main():
     dobj.program_version = __version__
     dobj.command_line = " ".join(sys.argv)
     dobj.dc["type"] = "Example"
-    dobj.add_creator_library("Python", ".".join(map(str, sys.version_info[0:3]))) #A bit of a bend, but gets the major version information out.
+    dobj.add_creator_library(
+        "Python", ".".join(map(str, sys.version_info[0:3]))
+    )  # A bit of a bend, but gets the major version information out.
     dobj.add_creator_library("Objects.py", Objects.__version__)
     dobj.add_creator_library("dfxml.py", Objects.dfxml.__version__)
 
@@ -49,138 +52,94 @@ def main():
     vbr.len = DISK_IMAGE_SIZE - FILE_SYSTEM_START
 
     fobj_specs = [
-      (
-        "first_sector.bin",
-        [
-          (0, 512)
-        ]
-      ),
-      (
-        "first_four_kilobytes.bin",
-        [
-          (0, 4000)
-        ]
-      ),
-      (
-        "contiguous_before_bad_region.dat",
-        [
-          (FILE_SYSTEM_START + 4096*1, 4096)
-        ]
-      ),
-      (
-        "contiguous_around_bad_region_left_edge.dat",
-        [
-          (DAMAGE_REGION_START - 4096, 8192)
-        ]
-      ),
-      (
-        "contiguous_in_bad_region.dat",
-        [
-          (DAMAGE_REGION_START + 4096*1, 4096)
-        ]
-      ),
-      (
-        "contiguous_around_bad_region_right_edge.dat",
-        [
-          (GOOD_REGION_START - 4096*1, 8192)
-        ]
-      ),
-      (
-        "contiguous_after_bad_region.dat",
-        [
-          (GOOD_REGION_START + 4096*2, 4096)
-        ]
-      ),
-      (
-        "fragmented_all_before_bad_region.dat",
-        [
-          (FILE_SYSTEM_START + 4096*10, 4096),
-          (FILE_SYSTEM_START + 4096*20, 4096),
-          (FILE_SYSTEM_START + 4096*30, 4096)
-        ]
-      ),
-      (
-        "fragmented_all_after_bad_region.dat",
-        [
-          (GOOD_REGION_START + 4096*10, 4096),
-          (GOOD_REGION_START + 4096*20, 4096),
-          (GOOD_REGION_START + 4096*30, 4096)
-        ]
-      ),
-      (
-        "fragmented_all_inside_bad_region.dat",
-        [
-          (DAMAGE_REGION_START + 4096*10, 4096),
-          (DAMAGE_REGION_START + 4096*20, 4096),
-          (DAMAGE_REGION_START + 4096*30, 4096)
-        ]
-      ),
-      (
-        "fragmented_beginning_inside_bad_region.dat",
-        [
-          (DAMAGE_REGION_START + 4096*40, 4096),
-          (GOOD_REGION_START + 4096*40, 4096)
-        ]
-      ),
-      (
-        "fragmented_middle_inside_bad_region.dat",
-        [
-          (FILE_SYSTEM_START + 4096*50, 4096),
-          (DAMAGE_REGION_START + 4096*50, 4096),
-          (GOOD_REGION_START + 4096*50, 4096)
-        ]
-      ),
-      (
-        "fragmented_end_inside_bad_region.dat",
-        [
-          (FILE_SYSTEM_START + 4096*60, 4096),
-          (DAMAGE_REGION_START + 4096*60, 4096)
-        ]
-      ),
-      (
-        "after_disk_image_end.dat",
-        [
-          (DISK_IMAGE_SIZE + 4096*1000, 4096)
-        ]
-      ),
-      (
-        "fragmented_partially_recoverable_directory",
-        [
-          (FILE_SYSTEM_START + 4096*170, 4096),
-          (DAMAGE_REGION_START + 4096*170, 4096),
-          (GOOD_REGION_START + 4096*170, 4096),
-        ]
-      ),
-      (
-        "fragmented_partially_recoverable_directory/child_file_1",
-        [
-          (FILE_SYSTEM_START + 4096*180, 4096)
-        ]
-      ),
-      (
-        "fragmented_partially_recoverable_directory/child_file_2",
-        [
-          (FILE_SYSTEM_START + 4096*190, 4096)
-        ]
-      ),
-      (
-        "fragmented_partially_recoverable_directory/child_file_3",
-        [
-          (FILE_SYSTEM_START + 4096*200, 4096)
-        ]
-      ),
-      (
-        "fragmented_partially_recoverable_directory/child_file_4",
-        [
-          (FILE_SYSTEM_START + 4096*210, 4096)
-        ]
-      ),
-      (
-        "fragmented_partially_recoverable_directory/child_file_9",
-        [
-          (GOOD_REGION_START + 4096*180, 4096)
-        ]
-      )
+        ("first_sector.bin", [(0, 512)]),
+        ("first_four_kilobytes.bin", [(0, 4000)]),
+        ("contiguous_before_bad_region.dat", [(FILE_SYSTEM_START + 4096 * 1, 4096)]),
+        (
+            "contiguous_around_bad_region_left_edge.dat",
+            [(DAMAGE_REGION_START - 4096, 8192)],
+        ),
+        ("contiguous_in_bad_region.dat", [(DAMAGE_REGION_START + 4096 * 1, 4096)]),
+        (
+            "contiguous_around_bad_region_right_edge.dat",
+            [(GOOD_REGION_START - 4096 * 1, 8192)],
+        ),
+        ("contiguous_after_bad_region.dat", [(GOOD_REGION_START + 4096 * 2, 4096)]),
+        (
+            "fragmented_all_before_bad_region.dat",
+            [
+                (FILE_SYSTEM_START + 4096 * 10, 4096),
+                (FILE_SYSTEM_START + 4096 * 20, 4096),
+                (FILE_SYSTEM_START + 4096 * 30, 4096),
+            ],
+        ),
+        (
+            "fragmented_all_after_bad_region.dat",
+            [
+                (GOOD_REGION_START + 4096 * 10, 4096),
+                (GOOD_REGION_START + 4096 * 20, 4096),
+                (GOOD_REGION_START + 4096 * 30, 4096),
+            ],
+        ),
+        (
+            "fragmented_all_inside_bad_region.dat",
+            [
+                (DAMAGE_REGION_START + 4096 * 10, 4096),
+                (DAMAGE_REGION_START + 4096 * 20, 4096),
+                (DAMAGE_REGION_START + 4096 * 30, 4096),
+            ],
+        ),
+        (
+            "fragmented_beginning_inside_bad_region.dat",
+            [
+                (DAMAGE_REGION_START + 4096 * 40, 4096),
+                (GOOD_REGION_START + 4096 * 40, 4096),
+            ],
+        ),
+        (
+            "fragmented_middle_inside_bad_region.dat",
+            [
+                (FILE_SYSTEM_START + 4096 * 50, 4096),
+                (DAMAGE_REGION_START + 4096 * 50, 4096),
+                (GOOD_REGION_START + 4096 * 50, 4096),
+            ],
+        ),
+        (
+            "fragmented_end_inside_bad_region.dat",
+            [
+                (FILE_SYSTEM_START + 4096 * 60, 4096),
+                (DAMAGE_REGION_START + 4096 * 60, 4096),
+            ],
+        ),
+        ("after_disk_image_end.dat", [(DISK_IMAGE_SIZE + 4096 * 1000, 4096)]),
+        (
+            "fragmented_partially_recoverable_directory",
+            [
+                (FILE_SYSTEM_START + 4096 * 170, 4096),
+                (DAMAGE_REGION_START + 4096 * 170, 4096),
+                (GOOD_REGION_START + 4096 * 170, 4096),
+            ],
+        ),
+        (
+            "fragmented_partially_recoverable_directory/child_file_1",
+            [(FILE_SYSTEM_START + 4096 * 180, 4096)],
+        ),
+        (
+            "fragmented_partially_recoverable_directory/child_file_2",
+            [(FILE_SYSTEM_START + 4096 * 190, 4096)],
+        ),
+        (
+            "fragmented_partially_recoverable_directory/child_file_3",
+            [(FILE_SYSTEM_START + 4096 * 200, 4096)],
+        ),
+        (
+            "fragmented_partially_recoverable_directory/child_file_4",
+            [(FILE_SYSTEM_START + 4096 * 210, 4096)],
+        ),
+        (
+            "fragmented_partially_recoverable_directory/child_file_9",
+            [(GOOD_REGION_START + 4096 * 180, 4096)],
+        ),
     ]
     for fobj_spec in fobj_specs:
         fobj = Objects.FileObject()
@@ -205,6 +164,7 @@ def main():
         fobj.filesize = sum([br.len for br in fobj.data_brs])
 
     dobj.print_dfxml()
+
 
 if __name__ == "__main__":
     main()

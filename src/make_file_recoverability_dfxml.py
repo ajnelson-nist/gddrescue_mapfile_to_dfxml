@@ -39,7 +39,7 @@ def get_portion_version() -> str:
     for byte_line in pip_list_stdout.split(b"\n"):
         if not byte_line.startswith(b"portion "):
             continue
-        version_part = byte_line[len("portion"):].strip()
+        version_part = byte_line[len("portion") :].strip()
         version_string = version_part.decode("ascii")
         break
     if version_string is None:
@@ -55,11 +55,15 @@ def main():
     dobj.program_version = __version__
     dobj.command_line = " ".join(sys.argv)
     dobj.dc["type"] = "Recoverability report"
-    dobj.add_creator_library("Python", ".".join(map(str, sys.version_info[0:3]))) #A bit of a bend, but gets the major version information out.
+    dobj.add_creator_library(
+        "Python", ".".join(map(str, sys.version_info[0:3]))
+    )  # A bit of a bend, but gets the major version information out.
     dobj.add_creator_library("objects.py", Objects.__version__)
     dobj.add_creator_library("dfxml.py", Objects.dfxml.__version__)
     dobj.add_creator_library("portion", get_portion_version())
-    dobj.add_creator_library("intact_byte_run_index.py", intact_byte_run_index.__version__)
+    dobj.add_creator_library(
+        "intact_byte_run_index.py", intact_byte_run_index.__version__
+    )
 
     if args.disk_image_dfxml:
         disk_image_dfxml = args.disk_image_dfxml
@@ -76,14 +80,20 @@ def main():
         if event != "start":
             continue
         if obj.byte_runs is None or len(obj.byte_runs) == 0:
-            raise ValueError("DFXML document %r does not have diskimageobject with byte runs.  Recoverability cannot be determined." % disk_image_dfxml)
+            raise ValueError(
+                "DFXML document %r does not have diskimageobject with byte runs.  Recoverability cannot be determined."
+                % disk_image_dfxml
+            )
         br_index.ingest_byte_runs(obj.byte_runs)
         diobj = obj
         break
 
     # Confirm initialization.
     if br_index.intervals is None:
-        raise ValueError("Disk image byte runs index not constructed after reading file that should have had disk image metadata: %r." % disk_image_dfxml)
+        raise ValueError(
+            "Disk image byte runs index not constructed after reading file that should have had disk image metadata: %r."
+            % disk_image_dfxml
+        )
 
     # Track diskimageobject.
     dobj.append(diobj)
@@ -122,7 +132,7 @@ def main():
         byte_runs_contained = True
         for byte_run in obj.data_brs:
             if byte_run.img_offset is None:
-                #TODO See if this can be computed from fs_offset.
+                # TODO See if this can be computed from fs_offset.
                 file_count_missing_byte_run_offset += 1
                 byte_runs_contained = None
                 break
@@ -147,20 +157,33 @@ def main():
 
     _logger.debug("file_count_encountered = %d." % file_count_encountered)
     _logger.debug("file_count_missing_byte_runs = %d." % file_count_missing_byte_runs)
-    _logger.debug("file_count_missing_byte_run_offset = %d." % file_count_missing_byte_run_offset)
-    _logger.debug("file_count_missing_byte_run_length = %d." % file_count_missing_byte_run_length)
-    _logger.debug("file_count_containment_unknown = %d." % file_count_containment_unknown)
+    _logger.debug(
+        "file_count_missing_byte_run_offset = %d." % file_count_missing_byte_run_offset
+    )
+    _logger.debug(
+        "file_count_missing_byte_run_length = %d." % file_count_missing_byte_run_length
+    )
+    _logger.debug(
+        "file_count_containment_unknown = %d." % file_count_containment_unknown
+    )
     _logger.debug("file_count_intact = %d." % file_count_intact)
-    _logger.debug("file_count_not_fully_recoverable = %d." % file_count_not_fully_recoverable)
+    _logger.debug(
+        "file_count_not_fully_recoverable = %d." % file_count_not_fully_recoverable
+    )
 
     with open(args.out_dfxml, "w") as out_fh:
         dobj.print_dfxml(out_fh)
 
+
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--debug", action="store_true")
-    parser.add_argument("--disk-image-dfxml", help="If not provided, requires --files-dfxml to have a diskimageobject element with geometry information.")
+    parser.add_argument(
+        "--disk-image-dfxml",
+        help="If not provided, requires --files-dfxml to have a diskimageobject element with geometry information.",
+    )
     parser.add_argument("files_dfxml")
     parser.add_argument("out_dfxml")
     args = parser.parse_args()
