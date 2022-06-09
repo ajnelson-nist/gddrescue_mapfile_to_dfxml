@@ -4,16 +4,15 @@
     <dc:type>Recoverability report</dc:type>
   </metadata>
   <creator>
-    <program>../../src/make_file_recoverability_dfxml.py</program>
+    <program>gddrescue_dfxml_recoverability_dfxml</program>
     <version>0.1.0</version>
     <execution_environment>
-      <command_line>../../src/make_file_recoverability_dfxml.py --debug --disk-image-dfxml diskimage.dfxml sample_file_system.dfxml __file_recoverability.dfxml</command_line>
+      <command_line>gddrescue_dfxml_recoverability_dfxml --debug --disk-image-dfxml diskimage.dfxml sample_file_system.dfxml __file_recoverability.dfxml</command_line>
     </execution_environment>
     <library name="Python" version="3.8.9"/>
     <library name="dfxml" version="1.0.2"/>
     <library name="dfxml.objects" version="0.12.0"/>
     <library name="portion" version="2.2.0"/>
-    <library name="intact_byte_run_index.py" version="0.1.0"/>
   </creator>
   <diskimageobject>
     <filesize>1000204886016</filesize>

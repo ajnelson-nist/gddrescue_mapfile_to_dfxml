@@ -11,10 +11,6 @@
 #
 # We would appreciate acknowledgement if the software is used.
 
-"""
-This program takes DFXML representations of a disk image that may have damaged sectors, and a DFXML manifest of files with file-content byte runs.  It outputs a DFXML manifest of files that have file-content byte runs that are not in the disk image (e.g. due to damaged sectors encountered during imaging).
-"""
-
 __version__ = "0.1.0"
 
 import argparse
@@ -27,7 +23,7 @@ import typing
 import dfxml
 from dfxml import objects as Objects
 
-import intact_byte_run_index
+import gddrescue_mapfile_to_dfxml.intact_byte_run_index
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
@@ -50,12 +46,31 @@ def get_portion_version() -> str:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="This program takes DFXML representations of a disk image that may have damaged sectors, and a DFXML manifest of files with file-content byte runs.  It outputs a DFXML manifest of files that have file-content byte runs that are not in the disk image (e.g. due to damaged sectors encountered during imaging)."
+    )
+    parser.add_argument("-d", "--debug", action="store_true")
+    parser.add_argument(
+        "--disk-image-dfxml",
+        help="If not provided, requires --files-dfxml to have a diskimageobject element with geometry information.",
+    )
+    parser.add_argument("files_dfxml")
+    parser.add_argument("out_dfxml")
+    args = parser.parse_args()
+
+    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
+
+    command_parts: typing.List[str] = []
+    command_name_basename = os.path.basename(sys.argv[0])
+    command_parts.append(command_name_basename)
+    command_parts.extend(sys.argv[1:])
+
     # Initialize output object.
     # TODO Upgrade to 1.3.0 on schema release.
     dobj = Objects.DFXMLObject(version="1.2.0+")
-    dobj.program = sys.argv[0]
+    dobj.program = command_name_basename
     dobj.program_version = __version__
-    dobj.command_line = " ".join(sys.argv)
+    dobj.command_line = " ".join(command_parts)
     dobj.dc["type"] = "Recoverability report"
     dobj.add_creator_library(
         "Python", ".".join(map(str, sys.version_info[0:3]))
@@ -63,16 +78,13 @@ def main() -> None:
     dobj.add_creator_library("dfxml", dfxml.__version__)
     dobj.add_creator_library("dfxml.objects", Objects.__version__)
     dobj.add_creator_library("portion", get_portion_version())
-    dobj.add_creator_library(
-        "intact_byte_run_index.py", intact_byte_run_index.__version__
-    )
 
     if args.disk_image_dfxml:
         disk_image_dfxml = args.disk_image_dfxml
     else:
         disk_image_dfxml = args.files_dfxml
 
-    br_index = intact_byte_run_index.IntactByteRunIndex()
+    br_index = gddrescue_mapfile_to_dfxml.intact_byte_run_index.IntactByteRunIndex()
 
     diobj: typing.Optional[Objects.DiskImageObject] = None
     # Index the byte runs of the disk image.
@@ -188,14 +200,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--debug", action="store_true")
-    parser.add_argument(
-        "--disk-image-dfxml",
-        help="If not provided, requires --files-dfxml to have a diskimageobject element with geometry information.",
-    )
-    parser.add_argument("files_dfxml")
-    parser.add_argument("out_dfxml")
-    args = parser.parse_args()
-    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
     main()
