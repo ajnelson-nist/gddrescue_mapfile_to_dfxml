@@ -24,7 +24,9 @@ If you do not have `pre-commit` installed in your Python environment, this repos
 
 ```bash
 make
+source .venv-pre-commit/bin/activate
 pre-commit run --all-files
+deactivate  # Steps out of dedicated pre-commit virtual environment
 ```
 
 
