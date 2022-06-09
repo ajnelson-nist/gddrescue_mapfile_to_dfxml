@@ -62,7 +62,7 @@ diskimage.report.html: \
   $(top_srcdir)/gddrescue_mapfile_to_dfxml/recoverability_report.py \
   diskimage.dfxml
 	source $(top_srcdir)/tests/venv/bin/activate \
-	  && gddrescue_dfxml_recovery_report \
+	  && gddrescue_dfxml_recoverability_report \
 	    diskimage.dfxml \
 	    > _$@
 	mv _$@ $@

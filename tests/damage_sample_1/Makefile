@@ -86,7 +86,7 @@ diskimage.report.html: \
   $(top_srcdir)/gddrescue_mapfile_to_dfxml/recoverability_report.py \
   diskimage.dfxml
 	source $(top_srcdir)/tests/venv/bin/activate \
-	  && gddrescue_dfxml_recovery_report \
+	  && gddrescue_dfxml_recoverability_report \
 	    --debug \
 	    diskimage.dfxml \
 	    > _$@
@@ -107,12 +107,12 @@ docs: \
 
 file_recoverability.dfxml: \
   $(top_srcdir)/gddrescue_mapfile_to_dfxml/intact_byte_run_index.py \
-  $(top_srcdir)/src/make_file_recoverability_dfxml.py \
+  $(top_srcdir)/gddrescue_mapfile_to_dfxml/recoverability_dfxml.py \
   $(top_srcdir)/tests/.venv.done.log \
   diskimage.dfxml \
   sample_file_system.dfxml
 	source $(top_srcdir)/tests/venv/bin/activate \
-	  && python $(top_srcdir)/src/make_file_recoverability_dfxml.py \
+	  && gddrescue_dfxml_recoverability_dfxml \
 	    --debug \
 	    --disk-image-dfxml diskimage.dfxml \
 	    sample_file_system.dfxml \
@@ -126,7 +126,7 @@ file_recoverability.report.html: \
   $(top_srcdir)/gddrescue_mapfile_to_dfxml/recoverability_report.py \
   file_recoverability.dfxml
 	source $(top_srcdir)/tests/venv/bin/activate \
-	  && gddrescue_dfxml_recovery_report \
+	  && gddrescue_dfxml_recoverability_report \
 	    --debug \
 	    file_recoverability.dfxml \
 	    > _$@

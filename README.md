@@ -25,8 +25,8 @@ This repository is scoped to supporting the following general form of workflow, 
 The above gives a simple summary for when a full file system analysis is not performed.
 
 4. Analyze the file systems of the disk image with a file system parser.  However this process is done, the output would need to be a DFXML file that records file objects with byte runs (denoting addresses of the file's contents on the disk).
-5. Run [`make_file_recoverability_dfxml.py`](src/make_file_recoverability_dfxml.py) on the DFXML files from steps 2 and 4.  This emits a DFXML file that only records the files that are not fully readable due to the partial disk imaging.
-6. Run [`report_file_recoverability_html.py`](src/report_file_recoverability_html.py) on the DFXML file from step 5.  This will produce an HTML report, an expanded version of what can be made in Step 3.
+5. Run [`gddrescue_dfxml_recoverability_dfxml`](gddrescue_mapfile_to_dfxml/recoverability_dfxml.py) on the DFXML files from steps 2 and 4.  This emits a DFXML file that only records the files that are not fully readable due to the partial disk imaging.
+6. Run [`gddrescue_dfxml_recoverability_report`](gddrescue_mapfile_to_dfxml/recoverability_report.py) on the DFXML file from step 5.  This will produce an HTML report, an expanded version of what can be made in Step 3.
 
 This figure illustrates the data flow in the above workflow:
 
@@ -71,11 +71,7 @@ This repository currently relies on extensions to DFXML 1.2.0, listed in [Schema
 
 ### Supplementary scripts
 
-This repository also has two scripts and a library that *may be migrated* into the [DFXML code base](https://github.com/simsong/dfxml).  They are in this repository at the moment because this is (to the author's knowledge) the only code base generating *DFXML files* for the purpose of analyzing disk imaging errors and their impact.
-
-* [`src/intact_byte_run_index.py`](src/intact_byte_run_index.py) - a class for comparing file geometry (byte run locations) with acquired disk image geometry.
-* [`src/make_file_recoverability_dfxml.py`](src/make_file_recoverability_dfxml.py) - a script that identifies files not fully present in an acquired disk image.  Emits a manifest of files as DFXML.
-* [`src/report_file_recoverability_html.py`](src/report_file_recoverability_html.py) - a script that 
+Portions of this repository that do not specifically pertain to interpreting the Mapfile *may be migrated* into the [DFXML code base](https://github.com/dfxml-working-group/dfxml_python).  They are housed in this repository at the moment because this is (to the author's knowledge) the only code base generating *DFXML files* for the purpose of analyzing disk imaging errors and their impact.  Aside from `gddrescue_dfxml_recoverability_dfxml` and `gddrescue_dfxml_recoverability_report`, the library [`intact_byte_run_index.py`](gddrescue_mapfile_to_dfxml/intact_byte_run_index.py) may also migrate as a more generic component.  It houses a class for comparing file geometry (byte run locations) with acquired disk image geometry.
 
 When a DFXML generator of the same scope as `gddrescue_mapfile_to_dfxml` is written for another tool, the above scripts are likely to migrate.
 
