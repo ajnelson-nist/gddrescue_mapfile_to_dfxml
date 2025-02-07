@@ -9,7 +9,7 @@
     <execution_environment>
       <command_line>sample_file_system_dfxml.py</command_line>
     </execution_environment>
-    <library name="Python" version="3.8.9"/>
+    <library name="Python" version="3.9.6"/>
     <library name="dfxml" version="1.0.2"/>
     <library name="dfxml.objects" version="0.12.0"/>
   </creator>
