@@ -20,6 +20,8 @@ all: \
 
 .PHONY: \
   check-docs \
+  check-supply-chain \
+  check-supply-chain-pre-commit \
   docs \
   docs-figs \
   docs-tests
@@ -78,6 +80,40 @@ check-docs-tests:
 	  PYTHON3=$(PYTHON3) \
 	  --directory tests \
 	  check-docs
+
+check-supply-chain: \
+  check-supply-chain-pre-commit
+
+# Update pre-commit configuration and use the updated config file to
+# review code.  Only have Make exit if 'pre-commit run' modifies files.
+check-supply-chain-pre-commit: \
+  .venv-pre-commit/var/.pre-commit-built.log
+	source .venv-pre-commit/bin/activate \
+	  && pre-commit autoupdate
+	git diff \
+	  --exit-code \
+	  .pre-commit-config.yaml \
+	  || ( \
+	      source .venv-pre-commit/bin/activate \
+	        && pre-commit run \
+	          --all-files \
+	          --config .pre-commit-config.yaml \
+	    ) \
+	    || git diff \
+	      --exit-code \
+	      --stat \
+	      || ( \
+	          echo \
+	            "WARNING:Makefile:pre-commit configuration can be updated.  It appears the update would change file formatting." \
+	            >&2 \
+	            ; exit 1 \
+                )
+	@git diff \
+	  --exit-code \
+	  .pre-commit-config.yaml \
+	  || echo \
+	    "INFO:Makefile:pre-commit configuration can be updated.  It appears the update would not change file formatting." \
+	    >&2
 
 clean:
 	@$(MAKE) --directory figs clean
