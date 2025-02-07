@@ -88,7 +88,7 @@ def main() -> None:
 
     diobj: typing.Optional[Objects.DiskImageObject] = None
     # Index the byte runs of the disk image.
-    for (event, obj) in Objects.iterparse(disk_image_dfxml):
+    for event, obj in Objects.iterparse(disk_image_dfxml):
         if not isinstance(obj, Objects.DiskImageObject):
             continue
         if event != "start":
@@ -130,7 +130,7 @@ def main() -> None:
     file_count_not_fully_recoverable = 0
 
     # Filter fileobject list, picking up file systems along the way.
-    for (event, obj) in Objects.iterparse(args.files_dfxml):
+    for event, obj in Objects.iterparse(args.files_dfxml):
         if isinstance(obj, Objects.VolumeObject):
             if event == "start":
                 appender_stack[-1].append(obj)

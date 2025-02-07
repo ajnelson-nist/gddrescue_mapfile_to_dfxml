@@ -21,7 +21,7 @@ import sys
 
 from dfxml import objects as Objects
 
-for (event, obj) in Objects.iterparse(sys.argv[1]):
+for event, obj in Objects.iterparse(sys.argv[1]):
     if not isinstance(obj, Objects.FileObject):
         continue
     print(obj.filename)

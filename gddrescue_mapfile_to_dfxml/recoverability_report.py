@@ -70,7 +70,7 @@ Prints HTML5 report to stdout."""
     ] = []
     fileobject_tally = 0
 
-    for (event, obj) in Objects.iterparse(args.disk_image_dfxml):
+    for event, obj in Objects.iterparse(args.disk_image_dfxml):
         if isinstance(obj, Objects.DiskImageObject):
             if event != "end":
                 continue
@@ -202,7 +202,7 @@ Prints HTML5 report to stdout."""
 
         last_fs_number = 0
         current_fs_number_str = ""
-        for (event, obj) in Objects.iterparse(args.disk_image_dfxml):
+        for event, obj in Objects.iterparse(args.disk_image_dfxml):
             if isinstance(obj, Objects.VolumeObject):
                 if event == "start":
                     last_fs_number += 1

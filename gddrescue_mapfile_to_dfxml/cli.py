@@ -86,7 +86,7 @@ class MapfileParser(object):
         self._state = ParseState.FILE_OPENED
         self._disk_image_len = 0
 
-        for (line_no, line) in enumerate(in_fh):
+        for line_no, line in enumerate(in_fh):
             self._line_no = line_no
 
             cleaned_line = line.strip()
