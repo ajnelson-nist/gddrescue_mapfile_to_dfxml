@@ -23,6 +23,7 @@ all: \
   check-mypy \
   check-supply-chain \
   check-supply-chain-pre-commit \
+  check-supply-chain-submodules \
   docs \
   docs-figs \
   docs-tests
@@ -90,7 +91,8 @@ check-mypy: \
   
 check-supply-chain: \
   check-mypy \
-  check-supply-chain-pre-commit
+  check-supply-chain-pre-commit \
+  check-supply-chain-submodules
 
 # Update pre-commit configuration and use the updated config file to
 # review code.  Only have Make exit if 'pre-commit run' modifies files.
@@ -122,6 +124,15 @@ check-supply-chain-pre-commit: \
 	  || echo \
 	    "INFO:Makefile:pre-commit configuration can be updated.  It appears the update would not change file formatting." \
 	    >&2
+
+check-supply-chain-submodules: \
+  .git_submodule_init.done.log
+	git submodule update \
+	  --remote
+	git diff \
+	  --exit-code \
+	  --ignore-submodules=dirty \
+	  dependencies
 
 clean:
 	@$(MAKE) --directory figs clean

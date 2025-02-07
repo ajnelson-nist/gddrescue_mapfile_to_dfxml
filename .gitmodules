@@ -1,3 +1,4 @@
 [submodule "deps/dfxml"]
 	path = deps/dfxml
 	url = https://github.com/ajnelson-nist/dfxml.git
+	branch = add_disk_image_object_fixity_fields
