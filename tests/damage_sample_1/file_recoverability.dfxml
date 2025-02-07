@@ -11,7 +11,7 @@
     </execution_environment>
     <library name="Python" version="3.9.6"/>
     <library name="dfxml" version="1.0.2"/>
-    <library name="dfxml.objects" version="0.12.0"/>
+    <library name="dfxml.objects" version="0.13.0"/>
     <library name="portion" version="2.6.0"/>
   </creator>
   <diskimageobject>
