@@ -20,6 +20,7 @@ all: \
 
 .PHONY: \
   check-docs \
+  check-mypy \
   check-supply-chain \
   check-supply-chain-pre-commit \
   docs \
@@ -59,10 +60,9 @@ all: \
 	touch $@
 
 check: \
-  .git_submodule_init.done.log \
-  .venv-pre-commit/var/.pre-commit-built.log
+  .venv-pre-commit/var/.pre-commit-built.log \
+  check-mypy
 	$(MAKE) \
-	  PYTHON3=$(PYTHON3) \
 	  --directory tests \
 	  check
 
@@ -81,7 +81,15 @@ check-docs-tests:
 	  --directory tests \
 	  check-docs
 
+check-mypy: \
+  .git_submodule_init.done.log
+	$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
+	  --directory tests \
+	  check
+  
 check-supply-chain: \
+  check-mypy \
   check-supply-chain-pre-commit
 
 # Update pre-commit configuration and use the updated config file to
