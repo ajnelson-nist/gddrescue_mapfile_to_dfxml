@@ -132,7 +132,7 @@ check-supply-chain-submodules: \
 	git diff \
 	  --exit-code \
 	  --ignore-submodules=dirty \
-	  dependencies
+	  deps
 
 clean:
 	@$(MAKE) --directory figs clean
