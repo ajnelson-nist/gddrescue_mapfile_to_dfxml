@@ -34,5 +34,9 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install xmllint
+      run: |
+        sudo apt-get update
+        sudo apt-get install --yes libxml2-utils
     - name: Review dependencies
       run: make check-supply-chain
