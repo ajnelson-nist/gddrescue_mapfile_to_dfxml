@@ -44,7 +44,7 @@ class IntactByteRunIndex(object):
         """
         Returns a list of (offset, length) pairs that represent sub-intervals of input_interval, which are present in the index.
         """
-        (input_offset, input_length) = input_run_pair
+        input_offset, input_length = input_run_pair
         if input_offset is None:
             return None
         if input_length is None:
@@ -109,7 +109,7 @@ class IntactByteRunIndex(object):
     def is_run_pair_contained(
         self, input_run_pair: typing.Tuple[typing.Optional[int], typing.Optional[int]]
     ) -> typing.Optional[bool]:
-        (input_offset, input_length) = input_run_pair
+        input_offset, input_length = input_run_pair
         if input_offset is None:
             return None
         if input_length is None:

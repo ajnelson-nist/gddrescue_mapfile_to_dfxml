@@ -125,8 +125,7 @@ Prints HTML5 report to stdout."""
     else:
         files_summary_message = "%d files were affected." % fileobject_tally
 
-    print(
-        """\
+    print("""\
 <!doctype html>
 <html>
   <head>
@@ -146,13 +145,10 @@ Prints HTML5 report to stdout."""
   <body>
     <h1>Report of file recoverability</h1>
     <p>%s</p>
-    <p>%s</p>"""
-        % (disk_summary_message, files_summary_message)
-    )
+    <p>%s</p>""" % (disk_summary_message, files_summary_message))
 
     if fileobject_tally > 0:
-        print(
-            """\
+        print("""\
     <table>
       <caption>Table 1. File systems</caption>
       <thead>
@@ -163,8 +159,7 @@ Prints HTML5 report to stdout."""
           <th>Type</th>
         </tr>
       </thead>
-      <tbody>"""
-        )
+      <tbody>""")
         for file_system_tuple in file_system_tuples:
             file_system_tuple_prettyprint = (
                 file_system_tuple[0],
@@ -172,18 +167,14 @@ Prints HTML5 report to stdout."""
                 "." if file_system_tuple[2] is None else str(file_system_tuple[2]),
                 file_system_tuple[3],
             )
-            print(
-                """\
+            print("""\
         <tr>
           <td>%d</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
-        </tr>"""
-                % file_system_tuple_prettyprint
-            )
-        print(
-            """\
+        </tr>""" % file_system_tuple_prettyprint)
+        print("""\
       </tbody>
     </table>
     <table>
@@ -197,8 +188,7 @@ Prints HTML5 report to stdout."""
           <th>Path</th>
         </tr>
       </thead>
-      <tbody>"""
-        )
+      <tbody>""")
 
         last_fs_number = 0
         current_fs_number_str = ""
@@ -255,11 +245,9 @@ Prints HTML5 report to stdout."""
     <p>The file type code is the DFXML encoding of <code>name_type</code>.  <code>r</code> is a regular file; <code>d</code> a directory; and <code>v</code> a "virtual" file, a file that is not precisely a file in the file system, but is treated as a file by the tool that parsed the file system.</p>
     <p>The "Size" column is the size of the file according to the file system.  "Missing bytes" indicates how many bytes of the file were not captured in the disk image.</p>"""
         )
-    print(
-        """\
+    print("""\
   </body>
-</html>"""
-    )
+</html>""")
 
 
 if __name__ == "__main__":
